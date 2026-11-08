@@ -12,7 +12,22 @@ export interface IBookmark extends IArchivable, IViewable {
   updatedAt: Date | null;
 }
 
-export type IUpdateBookmark = Pick<IBookmark, "type" | "url" | "name" | "description" | "tags">;
+export interface IBookmarkSerializable {
+  id: string;
+  type: BookmarkType;
+  url: string;
+  name: string;
+  description: string;
+  tags: string[];
+  createdAt: string;
+  updatedAt: string | null;
+  archivedAt: string | null;
+  viewCount: number;
+  lastViewedAt: string | null;
+}
+
+export type ICreateBookmark = Pick<IBookmark, "url" | "name" | "description" | "tags">;
+export type IUpdateBookmark = Pick<IBookmark, "url" | "name" | "description" | "tags">;
 
 export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBookmark, "tags"> {
   id: string;
@@ -88,36 +103,28 @@ export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBook
   }
 
   update(data: IUpdateBookmark) {
-    this.type = data.type;
-
+    this.url = Bookmark.normalizeURL(data.url);
     this.name = data.name;
-
     this.description = data.description;
-
-    for (const tag of data.tags) {
-      this.tags.add(tag);
-    }
-
+    this.tags = new Set(Bookmark.normalizeTags(data.tags));
     this.updatedAt = new Date();
   }
 
   partialUpdate(data: Partial<IUpdateBookmark>) {
-    if (data?.type) {
-      this.type = data.type;
+    if (data.url !== undefined) {
+      this.url = Bookmark.normalizeURL(data.url);
     }
 
-    if (data?.name) {
+    if (data.name !== undefined) {
       this.name = data.name;
     }
 
-    if (data?.description) {
+    if (data.description !== undefined) {
       this.description = data.description;
     }
 
-    if (data?.tags) {
-      for (const tag of data.tags) {
-        this.tags.add(tag);
-      }
+    if (data.tags !== undefined) {
+      this.tags = new Set(Bookmark.normalizeTags(data.tags));
     }
 
     this.updatedAt = new Date();
@@ -125,54 +132,63 @@ export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBook
 
   archive() {
     this.type = BookmarkType.Archived;
-
     super.archive();
+    this.updatedAt = new Date();
   }
 
   unarchive() {
     this.type = BookmarkType.Active;
-
     super.unarchive();
+    this.updatedAt = new Date();
   }
 
-  static fromJSON(data: IBookmark) {
-    const bookmark = new Bookmark(data.type, data.url, data.name, data.description, data.tags);
+  view() {
+    super.view();
+    this.updatedAt = new Date();
+  }
+
+  static fromJSON(data: IBookmarkSerializable) {
+    const bookmark = new Bookmark(
+      data.type,
+      data.url,
+      data.name,
+      data.description,
+      data.tags ?? [],
+    );
 
     if (data.id) {
       bookmark.id = data.id;
     }
 
     if (data.createdAt) {
-      bookmark.createdAt = data.createdAt;
+      bookmark.createdAt = Bookmark.toDate(data.createdAt);
     }
-
-    if (data.updatedAt) {
-      bookmark.updatedAt = data.updatedAt;
-    }
-
-    // #region Archivable
-    if (data.archivedAt) {
-      bookmark.archivedAt = data.archivedAt;
-    }
-    // #endregion
-
-    // #region Viewable
+    bookmark.updatedAt = data.updatedAt ? Bookmark.toDate(data.updatedAt) : null;
+    bookmark.archivedAt = data.archivedAt ? Bookmark.toDate(data.archivedAt) : null;
     if (typeof data.viewCount === "number") {
       bookmark.viewCount = data.viewCount;
     }
-
     if (data.lastViewedAt) {
-      bookmark.lastViewedAt = data.lastViewedAt;
+      bookmark.lastViewedAt = Bookmark.toDate(data.lastViewedAt);
     }
-    // #endregion
 
     return bookmark;
   }
 
-  toJSON() {
+  private static toDate(value: Date | string): Date {
+    const date = value instanceof Date ? new Date(value) : new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      throw new Error("Bookmark timestamps must be valid dates.");
+    }
+
+    return date;
+  }
+
+  toJSON(): IBookmarkSerializable {
     return {
       id: this.id,
       type: this.type,
+      url: this.url.toString(),
       name: this.name,
       description: this.description,
       tags: Array.from(this.tags),
