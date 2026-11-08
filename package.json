@@ -32,6 +32,7 @@
     "@vitest/browser": "^5.1.0",
     "@vitest/browser-playwright": "^5.1.0",
     "autoprefixer": "^10.6.2",
+    "nano-staged": "^1.0.2",
     "oxc-transform-react": "^0.156.0",
     "oxfmt": "^0.77.0",
     "oxlint": "^1.90.0",
