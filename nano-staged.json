@@ -1,0 +1,4 @@
+{
+  "*.{ts,tsx}": ["oxfmt", "oxlint --no-error-on-unmatched-pattern --max-warnings 15"],
+  "*.{json,css,md}": ["oxfmt"]
+}
