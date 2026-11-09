@@ -13,13 +13,9 @@ export default function GoogleFaviconProvider({
 }: GoogleFaviconProviderProps) {
   const url = toURL(urlOrLink);
 
-  const faviconURL = new URL("https://t2.gstatic.com/faviconV2");
-
-  faviconURL.searchParams.set("client", "SOCIAL");
-  faviconURL.searchParams.set("type", "FAVICON");
-  faviconURL.searchParams.set("fallback_opts", ["TYPE", "SIZE", "URL"].join(","));
-  faviconURL.searchParams.set("url", url.origin);
-  faviconURL.searchParams.set("size", String(size));
+  const faviconURL = new URL("https://www.google.com/s2/favicons");
+  faviconURL.searchParams.set("domain", url.origin);
+  faviconURL.searchParams.set("sz", String(size));
 
   return (
     <img
