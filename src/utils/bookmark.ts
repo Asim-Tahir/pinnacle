@@ -1,6 +1,6 @@
 import { Bookmark } from "@/models";
 
-import { compareDates, elapsedDays } from "./date";
+import { compareDates, elapsedDays, toDate } from "./date";
 
 /**
  * Scores a bookmark by freshness, recent use, and accumulated views.
@@ -28,8 +28,11 @@ function scoreBookmark(bookmark: Bookmark, now: number): number {
  * @param now Time used to calculate scores. Defaults to the current time.
  * @returns A new array of active bookmarks in ranking order.
  */
-export function rankActiveBookmarks(bookmarks: readonly Bookmark[], now = new Date()): Bookmark[] {
-  const timestamp = now.getTime();
+export function rankActiveBookmarks(
+  bookmarks: readonly Bookmark[],
+  now: Date | string | number = new Date(),
+): Bookmark[] {
+  const timestamp = toDate(now).getTime();
 
   return bookmarks
     .filter((bookmark) => bookmark.archivedAt === null)
