@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { BookmarkType } from "@/enums";
-import { Bookmark, type IBookmark } from "@/models";
+import { Bookmark, type IBookmarkSerializable } from "@/models";
 
 import { rankActiveBookmarks, sortArchivedBookmarks } from "./bookmark";
 
-const now = new Date("2026-01-31T12:00:00.000Z");
+const now = "2026-01-31T12:00:00.000Z";
 
-function mockBookmark(overrides: Partial<IBookmark> = {}): Bookmark {
+function mockBookmark(overrides: Partial<IBookmarkSerializable> = {}): Bookmark {
   return Bookmark.fromJSON({
     id: "761b55e1-e29a-59d1-94e4-e58ff250d86e",
     type: BookmarkType.Active,
@@ -15,8 +15,8 @@ function mockBookmark(overrides: Partial<IBookmark> = {}): Bookmark {
     name: "Google",
     description: "",
     tags: [],
-    createdAt: new Date("2026-01-01T12:00:00.000Z"),
-    updatedAt: new Date("2026-01-01T12:00:00.000Z"),
+    createdAt: "2026-01-01T12:00:00.000Z",
+    updatedAt: "2026-01-01T14:24:34.754Z",
     viewCount: 0,
     lastViewedAt: null,
     archivedAt: null,
@@ -42,9 +42,9 @@ describe("bookmark domain rules", () => {
   test("ranks by freshness, recent views, and saturated view count", () => {
     const ranked = rankActiveBookmarks(
       [
-        mockBookmark({ id: "stale", createdAt: new Date("2025-12-02T12:00:00.000Z") }),
+        mockBookmark({ id: "stale", createdAt: "2025-12-02T12:00:00.000Z" }),
         mockBookmark({ id: "recent", lastViewedAt: now, viewCount: 1 }),
-        mockBookmark({ id: "never-viewed", createdAt: new Date("2026-01-30T12:00:00.000Z") }),
+        mockBookmark({ id: "never-viewed", createdAt: "2026-01-30T12:00:00.000Z" }),
       ],
       now,
     );
@@ -55,9 +55,9 @@ describe("bookmark domain rules", () => {
   test("orders equal scores by updated time and then stable id", () => {
     const ranked = rankActiveBookmarks(
       [
-        mockBookmark({ id: "z", updatedAt: new Date("2026-01-20T12:00:00.000Z") }),
-        mockBookmark({ id: "b", updatedAt: new Date("2026-01-20T12:00:00.000Z") }),
-        mockBookmark({ id: "newer", updatedAt: new Date("2026-01-21T12:00:00.000Z") }),
+        mockBookmark({ id: "z", updatedAt: "2026-01-20T12:00:00.000Z" }),
+        mockBookmark({ id: "b", updatedAt: "2026-01-20T12:00:00.000Z" }),
+        mockBookmark({ id: "newer", updatedAt: "2026-01-21T12:00:00.000Z" }),
       ],
       now,
     );
@@ -66,8 +66,8 @@ describe("bookmark domain rules", () => {
   });
 
   test("orders archived bookmarks newest first without mutating the input", () => {
-    const older = mockBookmark({ id: "older", archivedAt: new Date("2026-01-10T12:00:00.000Z") });
-    const newer = mockBookmark({ id: "newer", archivedAt: new Date("2026-01-20T12:00:00.000Z") });
+    const older = mockBookmark({ id: "older", archivedAt: "2026-01-10T12:00:00.000Z" });
+    const newer = mockBookmark({ id: "newer", archivedAt: "2026-01-20T12:00:00.000Z" });
     const input = [older, newer];
 
     expect(sortArchivedBookmarks(input).map(({ id }) => id)).toEqual(["newer", "older"]);
@@ -75,19 +75,19 @@ describe("bookmark domain rules", () => {
   });
 
   test("clamps future timestamps when the system clock moves backward", () => {
-    const future = new Date("2026-02-01T12:00:00.000Z");
+    const future = "2026-02-01T12:00:00.000Z";
     const ranked = rankActiveBookmarks(
       [
         mockBookmark({
           id: "future",
           createdAt: future,
-          updatedAt: new Date("2026-01-20T12:00:00.000Z"),
+          updatedAt: "2026-01-20T12:00:00.000Z",
           lastViewedAt: future,
         }),
         mockBookmark({
           id: "current",
           createdAt: now,
-          updatedAt: new Date("2026-01-21T12:00:00.000Z"),
+          updatedAt: "2026-01-21T12:00:00.000Z",
           lastViewedAt: now,
         }),
       ],
