@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { compareDates, elapsedDays, parseDate } from "./date";
+import { compareDates, elapsedDays, parseDate, toDate } from "./date";
 
 const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
@@ -17,6 +17,24 @@ describe("parseDate", () => {
 
   test("returns NaN for an invalid date string", () => {
     expect(parseDate("not a date")).toBeNaN();
+  });
+});
+
+describe("toDate", () => {
+  test("returns the same Date instance", () => {
+    const date = new Date("2026-01-31T12:00:00.000Z");
+
+    expect(toDate(date)).toBe(date);
+  });
+
+  test("converts a date string to a Date", () => {
+    expect(toDate("2026-01-31T12:00:00.000Z")).toEqual(new Date("2026-01-31T12:00:00.000Z"));
+  });
+
+  test("converts a numeric timestamp to a Date", () => {
+    const timestamp = Date.UTC(2026, 0, 31, 12);
+
+    expect(toDate(timestamp)).toEqual(new Date(timestamp));
   });
 });
 

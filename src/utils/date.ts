@@ -6,6 +6,14 @@ export function parseDate(date: Date | string) {
   return Date.parse(date);
 }
 
+export function toDate(date: Date | string | number): Date {
+  if (date instanceof Date) {
+    return date;
+  }
+
+  return new Date(date);
+}
+
 export function elapsedDays(timestamp: Date | string, now: number): number {
   const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
