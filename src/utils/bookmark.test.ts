@@ -1,9 +1,14 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
 import { BookmarkType } from "@/enums";
 import { Bookmark, type IBookmarkSerializable } from "@/models";
 
-import { displayBookmark, rankActiveBookmarks, sortArchivedBookmarks } from "./bookmark";
+import {
+  displayBookmark,
+  openBookmark,
+  rankActiveBookmarks,
+  sortArchivedBookmarks,
+} from "./bookmark";
 
 const now = "2026-01-31T12:00:00.000Z";
 
@@ -38,10 +43,79 @@ describe("displayBookmark", () => {
   });
 });
 
+describe("openBookmark", () => {
+  function reservedTab() {
+    return {
+      opener: window,
+      location: { href: "about:blank" },
+      close: vi.fn(),
+    } as unknown as Window;
+  }
+
+  test("reserves a protected tab and navigates only after view persistence", async () => {
+    const tab = reservedTab();
+    const events: string[] = [];
+    let finishPersistence!: () => void;
+    const persistView = vi.fn(() => {
+      events.push("persist");
+      return new Promise<void>((resolve) => {
+        finishPersistence = resolve;
+      });
+    });
+    const reserveTab = vi.fn(() => {
+      events.push("reserve");
+      return tab;
+    });
+
+    const opening = openBookmark("https://example.com/path", persistView, reserveTab);
+
+    expect(events).toEqual(["reserve", "persist"]);
+    expect(tab.opener).toBeNull();
+    expect(tab.location.href).toBe("about:blank");
+
+    finishPersistence();
+    await expect(opening).resolves.toBe(true);
+
+    expect(tab.location.href).toBe("https://example.com/path");
+    expect(events).toEqual(["reserve", "persist"]);
+  });
+
+  test("reports a blocked popup only after view persistence", async () => {
+    const events: string[] = [];
+    const persistView = vi.fn(async () => {
+      events.push("persist");
+    });
+    const reserveTab = vi.fn(() => {
+      events.push("reserve");
+      return null;
+    });
+
+    await expect(openBookmark("https://example.com/", persistView, reserveTab)).resolves.toBe(
+      false,
+    );
+
+    expect(events).toEqual(["reserve", "persist"]);
+  });
+
+  test("closes the reserved tab and does not navigate when persistence fails", async () => {
+    const tab = reservedTab();
+    const failure = new Error("Storage is unavailable");
+    const persistView = vi.fn().mockRejectedValue(failure);
+
+    await expect(openBookmark("https://example.com/", persistView, () => tab)).rejects.toBe(
+      failure,
+    );
+
+    expect(tab.location.href).toBe("about:blank");
+    expect(tab.close).toHaveBeenCalledOnce();
+  });
+});
+
 describe("bookmark domain rules", () => {
   test("normalizes bookmark URLs and tags", () => {
     const created = mockBookmark({
       url: " HTTPS://EXAMPLE.COM:443/a?b=1#section ",
+
       tags: ["  Work ", "work", "", "Reading"],
     });
 

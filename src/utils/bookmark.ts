@@ -9,6 +9,32 @@ export function displayBookmark(bookmark: Bookmark) {
   return bookmark.name.trim() || bookmarkURL.hostname;
 }
 
+export async function openBookmark(
+  url: string,
+  viewBookmark: () => Promise<unknown>,
+  reserveTab: () => Window | null = () => window.open("about:blank", "_blank"),
+): Promise<boolean> {
+  const tab = reserveTab();
+  if (tab) tab.opener = null;
+
+  try {
+    await viewBookmark();
+  } catch (error) {
+    tab?.close();
+    throw error;
+  }
+
+  if (!tab) return false;
+
+  try {
+    tab.location.href = url;
+    return true;
+  } catch {
+    tab.close();
+    return false;
+  }
+}
+
 /**
  * Scores a bookmark by freshness, recent use, and accumulated views.
  * Future timestamps are treated as having zero elapsed time.
