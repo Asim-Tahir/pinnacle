@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { BookmarkType } from "@/enums";
 import { Bookmark, type IBookmarkSerializable } from "@/models";
 
-import { rankActiveBookmarks, sortArchivedBookmarks } from "./bookmark";
+import { displayBookmark, rankActiveBookmarks, sortArchivedBookmarks } from "./bookmark";
 
 const now = "2026-01-31T12:00:00.000Z";
 
@@ -23,6 +23,20 @@ function mockBookmark(overrides: Partial<IBookmarkSerializable> = {}): Bookmark 
     ...overrides,
   });
 }
+
+describe("displayBookmark", () => {
+  test("returns a trimmed bookmark name", () => {
+    expect(displayBookmark(mockBookmark({ name: "  Search  " }))).toBe("Search");
+  });
+
+  test("falls back to the URL hostname when the name is empty", () => {
+    expect(displayBookmark(mockBookmark({ name: "" }))).toBe("www.google.com");
+  });
+
+  test("falls back to the URL hostname when the name contains only whitespace", () => {
+    expect(displayBookmark(mockBookmark({ name: "   " }))).toBe("www.google.com");
+  });
+});
 
 describe("bookmark domain rules", () => {
   test("normalizes bookmark URLs and tags", () => {

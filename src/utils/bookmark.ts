@@ -1,6 +1,13 @@
 import { Bookmark } from "@/models";
 
 import { compareDates, elapsedDays, toDate } from "./date";
+import { toURL } from "./url";
+
+export function displayBookmark(bookmark: Bookmark) {
+  const bookmarkURL = toURL(bookmark.url);
+
+  return bookmark.name.trim() || bookmarkURL.hostname;
+}
 
 /**
  * Scores a bookmark by freshness, recent use, and accumulated views.
