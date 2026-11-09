@@ -1,5 +1,6 @@
 import { BookmarkType } from "@/enums";
 import { type IArchivable, type IViewable, Archivable, Viewable, mixins } from "@/mixins";
+import { toDate } from "@/utils/date";
 
 export interface IBookmark extends IArchivable, IViewable {
   id: string;
@@ -161,27 +162,18 @@ export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBook
     }
 
     if (data.createdAt) {
-      bookmark.createdAt = Bookmark.toDate(data.createdAt);
+      bookmark.createdAt = toDate(data.createdAt);
     }
-    bookmark.updatedAt = data.updatedAt ? Bookmark.toDate(data.updatedAt) : null;
-    bookmark.archivedAt = data.archivedAt ? Bookmark.toDate(data.archivedAt) : null;
+    bookmark.updatedAt = data.updatedAt ? toDate(data.updatedAt) : null;
+    bookmark.archivedAt = data.archivedAt ? toDate(data.archivedAt) : null;
     if (typeof data.viewCount === "number") {
       bookmark.viewCount = data.viewCount;
     }
     if (data.lastViewedAt) {
-      bookmark.lastViewedAt = Bookmark.toDate(data.lastViewedAt);
+      bookmark.lastViewedAt = toDate(data.lastViewedAt);
     }
 
     return bookmark;
-  }
-
-  private static toDate(value: Date | string): Date {
-    const date = value instanceof Date ? new Date(value) : new Date(value);
-    if (Number.isNaN(date.getTime())) {
-      throw new Error("Bookmark timestamps must be valid dates.");
-    }
-
-    return date;
   }
 
   toJSON(): IBookmarkSerializable {
