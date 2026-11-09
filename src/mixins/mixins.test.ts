@@ -3,7 +3,11 @@ import { expect, test } from "vitest";
 import { mixins } from "./mixins";
 
 class Base {
-  constructor(readonly name: string) {}
+  readonly name: string;
+
+  constructor(name: string) {
+    this.name = name;
+  }
 }
 
 function createAlphaBehavior(initialValue: number) {
