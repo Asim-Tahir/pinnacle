@@ -191,4 +191,8 @@ export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBook
       lastViewedAt: this.lastViewedAt?.toISOString() ?? null,
     };
   }
+
+  clone(): Bookmark {
+    return Bookmark.fromJSON(this.toJSON());
+  }
 }
