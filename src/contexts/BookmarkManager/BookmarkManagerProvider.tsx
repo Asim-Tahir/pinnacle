@@ -104,7 +104,6 @@ export function BookmarkManagerProvider({ children }: React.PropsWithChildren) {
   }
 
   async function deleteBookmark(bookmark: Bookmark) {
-    if (!window.confirm(`Permanently delete “${displayBookmark(bookmark)}”?`)) return;
     await runAction(() => remove(bookmark.id));
   }
 

@@ -173,7 +173,7 @@ test("hydrates, sorts, searches, filters tags, and clears filters on view change
   await expect.element(screen.getByText("Visible: Atlas | Zephyr")).toBeVisible();
 });
 
-test("creates, updates, partially updates, and confirms bookmark deletion", async () => {
+test("creates, updates, partially updates, and deletes bookmarks", async () => {
   const screen = await renderManager();
 
   await screen.getByRole("button", { name: "Create Atlas" }).click();
@@ -187,14 +187,6 @@ test("creates, updates, partially updates, and confirms bookmark deletion", asyn
     .element(screen.getByText("Bookmarks: Atlas Revised:Partial note:Updated:0"))
     .toBeVisible();
 
-  const confirm = vi.spyOn(window, "confirm").mockReturnValue(false);
-  await screen.getByRole("button", { name: "Delete first" }).click();
-  await expect
-    .element(screen.getByText("Bookmarks: Atlas Revised:Partial note:Updated:0"))
-    .toBeVisible();
-  expect(confirm).toHaveBeenCalledOnce();
-
-  confirm.mockReturnValue(true);
   await screen.getByRole("button", { name: "Delete first" }).click();
   await expect.element(screen.getByText("Bookmarks: none")).toBeVisible();
 });

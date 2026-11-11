@@ -9,8 +9,19 @@ import {
   Pencil,
   Trash2,
 } from "lucide-react";
+import { useState } from "react";
 
 import { Favicon } from "@/components/favicon";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -34,6 +45,7 @@ export interface BookmarkCardProps {
 }
 
 export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) {
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const { openBookmark, archiveBookmark, restoreBookmark, deleteBookmark } = useBookmarkManager();
   const { openEditDialog } = useBookmarkDialog();
 
@@ -78,7 +90,7 @@ export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) 
                 <ArchiveRestore /> Restore
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem variant="destructive" onSelect={() => void deleteBookmark(bookmark)}>
+            <DropdownMenuItem variant="destructive" onSelect={() => setDeleteDialogOpen(true)}>
               <Trash2 /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -127,6 +139,23 @@ export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) 
           <ExternalLink size={16} />
         </a>
       </CardFooter>
+
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete bookmark?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Permanently delete “{displayBookmark(bookmark)}”? This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction variant="destructive" onClick={() => void deleteBookmark(bookmark)}>
+              Delete bookmark
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Card>
   );
 }
