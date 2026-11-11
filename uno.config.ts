@@ -1,4 +1,4 @@
-import { defineConfig, presetWind4 } from "unocss";
+import { defineConfig, presetWind4, transformerDirectives } from "unocss";
 
 export default defineConfig({
   outputToCssLayers: true,
@@ -7,6 +7,7 @@ export default defineConfig({
       dark: "media",
     }),
   ],
+  transformers: [transformerDirectives()],
   theme: {
     colors: {
       border: "var(--border)",
