@@ -3,13 +3,15 @@ import { Plus, Search, X } from "lucide-react";
 import { useBookmarkDialog } from "@/hooks/useBookmarkDialog";
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
 
+import "./Header.css";
+
 export default function Header() {
   const { query, setQuery } = useBookmarkManager();
   const { openCreateDialog } = useBookmarkDialog();
 
   return (
-    <header className="topbar">
-      <label className="search-box">
+    <header className="header">
+      <label className="header-search-box">
         <Search size={16} />
         <input
           type="search"
@@ -24,7 +26,7 @@ export default function Header() {
           </button>
         )}
       </label>
-      <div className="topbar-actions">
+      <div className="header-actions">
         <button
           className="add-button"
           type="button"
@@ -33,7 +35,7 @@ export default function Header() {
         >
           <Plus size={17} /> <span>Add Bookmark</span>
         </button>
-        <span className="profile-avatar" aria-label="Local bookmark library">
+        <span className="header-profile-avatar" aria-label="Local bookmark library">
           P
         </span>
       </div>
