@@ -97,7 +97,6 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
       >
         <DialogContent className="bookmark-dialog">
           <DialogHeader>
-            <p className="eyebrow">Your library</p>
             <DialogTitle>{editingBookmark ? "Edit bookmark" : "Add a bookmark"}</DialogTitle>
           </DialogHeader>
           <form className="bookmark-form" onSubmit={submitForm}>
