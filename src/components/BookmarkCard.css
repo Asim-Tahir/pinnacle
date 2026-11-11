@@ -1,0 +1,135 @@
+@layer components.bookmark-card {
+  .bookmark-card {
+    @apply flex flex-col;
+    @apply min-w-0 min-h-[218px];
+    @apply gap-0;
+    @apply overflow-hidden;
+    @apply rounded-[9px];
+    @apply border border-[#e3eae8];
+    @apply bg-[var(--paper)];
+    @apply py-0;
+    @apply shadow-[0_2px_3px_rgb(24_58_53_/_4%)];
+    @apply transition-[box-shadow,transform] duration-150 ease-[ease];
+    @apply animate-[card-arrive_320ms_both];
+  }
+
+  .bookmark-card:hover {
+    @apply -translate-y-0.5;
+    @apply shadow-[0_7px_20px_rgb(24_58_53_/_9%)];
+  }
+
+  .bookmark-card-header {
+    @apply flex items-center;
+    @apply min-h-[61px];
+    @apply gap-[9px];
+    @apply mx-3 px-0;
+    @apply border-b border-[#e8eeec];
+  }
+
+  .bookmark-card-footer {
+    @apply flex items-center;
+    @apply min-h-[33px];
+    @apply gap-[11px];
+    @apply border-t border-[#e8eeec];
+    @apply bg-[var(--paper)];
+    @apply px-3 py-0;
+    @apply text-[10px] text-[#71817e];
+  }
+
+  .bookmark-card-footer > span {
+    @apply inline-flex items-center;
+    @apply gap-1;
+    @apply whitespace-nowrap;
+  }
+
+  .bookmark-card .favicon {
+    @apply grid flex-[0_0_36px] place-items-center;
+    @apply w-9 h-9;
+    @apply overflow-hidden;
+    @apply border border-[#edf1f0] rounded-[7px];
+    @apply bg-white;
+  }
+
+  .bookmark-card .favicon img {
+    @apply w-[25px] h-[25px] object-contain;
+  }
+
+  .bookmark-card .favicon-fallback {
+    @apply text-[var(--teal)] font-[var(--font-display)];
+    @apply text-[18px] font-[720];
+  }
+
+  .bookmark-card-title {
+    @apply grid flex-1;
+    @apply min-w-0;
+    @apply gap-[2px] p-0;
+    @apply text-[var(--ink)] text-left;
+    @apply bg-transparent border-0;
+    @apply cursor-pointer;
+  }
+
+  .bookmark-card-title span {
+    @apply overflow-hidden;
+    @apply font-[var(--font-display)] text-[15px] font-[690] leading-[1.25];
+    @apply text-ellipsis whitespace-nowrap;
+  }
+
+  .bookmark-card-title small {
+    @apply overflow-hidden;
+    @apply text-[#82908e] text-[10px];
+    @apply text-ellipsis whitespace-nowrap;
+  }
+
+  .bookmark-card-menu-button {
+    @apply grid flex-none place-items-center;
+    @apply w-[29px] h-[29px];
+    @apply text-[#5b6d6a] bg-transparent;
+    @apply border border-[#dce5e3] rounded-[6px];
+    @apply cursor-pointer;
+  }
+
+  .bookmark-card-menu-button:hover {
+    @apply text-[var(--teal)] bg-[#f4f8f7];
+  }
+
+  .bookmark-card-open-area {
+    @apply flex flex-1 flex-col items-stretch;
+    @apply gap-[11px] p-3;
+    @apply text-inherit text-left;
+    @apply bg-transparent border-0;
+    @apply cursor-pointer;
+  }
+
+  .bookmark-card-description {
+    @apply line-clamp-3 min-h-[48px] overflow-hidden;
+    @apply text-[#5d6b69] text-[12px] leading-[1.48];
+  }
+
+  .bookmark-card-tags {
+    @apply flex flex-wrap gap-[5px] mt-auto;
+  }
+
+  .bookmark-card-tag-chip {
+    @apply inline-flex items-center;
+    @apply min-h-[19px] max-w-full;
+    @apply px-[7px] py-[1px] overflow-hidden;
+    @apply text-[#536663] text-[10px] leading-[1.3];
+    @apply bg-[var(--chip)] rounded-[4px];
+    @apply text-ellipsis whitespace-nowrap;
+  }
+
+  .bookmark-card-external-link {
+    @apply grid w-[23px] h-[23px] ml-auto place-items-center;
+    @apply text-[#6c7d79] rounded-[4px];
+  }
+
+  .bookmark-card-external-link:hover {
+    @apply text-[var(--teal)] bg-[#edf4f2];
+  }
+
+  @media (max-width: 540px) {
+    .bookmark-card {
+      @apply min-h-[206px];
+    }
+  }
+}
