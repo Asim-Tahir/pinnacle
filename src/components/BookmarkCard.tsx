@@ -10,8 +10,6 @@ import {
   Trash2,
 } from "lucide-react";
 
-import "./BookmarkCard.css";
-
 import { Favicon } from "@/components/favicon";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import {
@@ -21,38 +19,35 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
+import { useBookmarkDialog } from "@/hooks/useBookmarkDialog";
+import { useBookmarkManager } from "@/hooks/useBookmarkManager";
 import type { Bookmark } from "@/models";
 import { displayBookmark } from "@/utils/bookmark";
 import { shortFormatDate } from "@/utils/date";
 import { toURL } from "@/utils/url";
 
+import "./BookmarkCard.css";
+
 export interface BookmarkCardProps {
   bookmark: Bookmark;
   archived: boolean;
-  onOpen: (bookmark: Bookmark) => void;
-  onEdit: (bookmark: Bookmark) => void;
-  onArchive: (bookmark: Bookmark) => void;
-  onRestore: (bookmark: Bookmark) => void;
-  onDelete: (bookmark: Bookmark) => void;
 }
 
-export default function BookmarkCard({
-  bookmark,
-  archived,
-  onOpen,
-  onEdit,
-  onArchive,
-  onRestore,
-  onDelete,
-}: BookmarkCardProps) {
+export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) {
+  const { openBookmark, archiveBookmark, restoreBookmark, deleteBookmark } = useBookmarkManager();
+  const { openEditDialog } = useBookmarkDialog();
+
   const url = toURL(bookmark.url);
 
   return (
     <Card className="bookmark-card" role="article">
       <CardHeader className="bookmark-card-header">
         <Favicon urlOrLink={url} />
-        <button className="bookmark-card-title" type="button" onClick={() => onOpen(bookmark)}>
+        <button
+          className="bookmark-card-title"
+          type="button"
+          onClick={() => void openBookmark(bookmark)}
+        >
           <span>{displayBookmark(bookmark)}</span>
           <small>{url.hostname}</small>
         </button>
@@ -69,27 +64,31 @@ export default function BookmarkCard({
           <DropdownMenuContent align="end">
             {!archived && (
               <>
-                <DropdownMenuItem onSelect={() => onEdit(bookmark)}>
+                <DropdownMenuItem onSelect={() => openEditDialog(bookmark)}>
                   <Pencil /> Edit
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => onArchive(bookmark)}>
+                <DropdownMenuItem onSelect={() => void archiveBookmark(bookmark)}>
                   <Archive /> Archive
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
               </>
             )}
             {archived && (
-              <DropdownMenuItem onSelect={() => onRestore(bookmark)}>
+              <DropdownMenuItem onSelect={() => void restoreBookmark(bookmark)}>
                 <ArchiveRestore /> Restore
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem variant="destructive" onSelect={() => onDelete(bookmark)}>
+            <DropdownMenuItem variant="destructive" onSelect={() => void deleteBookmark(bookmark)}>
               <Trash2 /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
-      <button className="bookmark-card-open-area" type="button" onClick={() => onOpen(bookmark)}>
+      <button
+        className="bookmark-card-open-area"
+        type="button"
+        onClick={() => void openBookmark(bookmark)}
+      >
         <span className="bookmark-card-description">
           {bookmark.description || "No description added."}
         </span>
@@ -122,7 +121,7 @@ export default function BookmarkCard({
           aria-label={`Open ${displayBookmark(bookmark)} in a new tab`}
           onClick={(event) => {
             event.preventDefault();
-            onOpen(bookmark);
+            void openBookmark(bookmark);
           }}
         >
           <ExternalLink size={16} />
