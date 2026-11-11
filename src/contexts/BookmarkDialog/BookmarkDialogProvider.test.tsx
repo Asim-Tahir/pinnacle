@@ -1,7 +1,8 @@
 import { expect, test } from "vitest";
 import { page } from "vitest/browser";
 
-import { BookmarkDialogProvider } from "@/contexts/BookmarkDialog/BookmarkDialogProvider";
+import { BookmarkDialogProvider } from "@/contexts/BookmarkDialog";
+import { BookmarkManagerProvider } from "@/contexts/BookmarkManager";
 import { BookmarkType } from "@/enums";
 import { useBookmarkDialog } from "@/hooks/useBookmarkDialog";
 import { Bookmark } from "@/models";
@@ -24,9 +25,11 @@ function DialogControls() {
 
 test("provides typed methods to open and close bookmark dialogs", async () => {
   const screen = await page.render(
-    <BookmarkDialogProvider>
-      <DialogControls />
-    </BookmarkDialogProvider>,
+    <BookmarkManagerProvider>
+      <BookmarkDialogProvider>
+        <DialogControls />
+      </BookmarkDialogProvider>
+    </BookmarkManagerProvider>,
   );
 
   await expect.element(screen.getByText("closed")).toBeVisible();

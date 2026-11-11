@@ -1,13 +1,13 @@
 import { useState } from "react";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Bookmark, type IUpdateBookmark } from "@/models";
-import { useBookmarksStore } from "@/store/bookmarks";
 import {
   BookmarkDialogContext,
   type BookmarkDialogContextValue,
   type BookmarkDialogState,
-} from "@/contexts/BookmarkDialog/BookmarkDialogContext";
+} from "@/contexts/BookmarkDialog";
+import { useBookmarkManager } from "@/hooks/useBookmarkManager";
+import { Bookmark, type IUpdateBookmark } from "@/models";
 
 interface BookmarkForm {
   url: string;
@@ -28,8 +28,7 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
   const [form, setForm] = useState<BookmarkForm>(emptyForm);
   const [formError, setFormError] = useState("");
 
-  const createBookmark = useBookmarksStore((store) => store.createBookmark);
-  const updateBookmark = useBookmarksStore((store) => store.updateBookmark);
+  const { createBookmark, updateBookmark } = useBookmarkManager();
 
   function openCreateDialog() {
     setForm(emptyForm);
