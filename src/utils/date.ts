@@ -14,6 +14,11 @@ export function toDate(date: Date | string | number): Date {
   return new Date(date);
 }
 
+export function shortFormatDate(date: Date | null | undefined) {
+  if (!date) return "Never";
+  return new Intl.DateTimeFormat("en", { day: "numeric", month: "short" }).format(date);
+}
+
 export function elapsedDays(timestamp: Date | string, now: number): number {
   const millisecondsPerDay = 24 * 60 * 60 * 1000;
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { compareDates, elapsedDays, parseDate, toDate } from "./date";
+import { compareDates, elapsedDays, parseDate, shortFormatDate, toDate } from "./date";
 
 const millisecondsPerDay = 24 * 60 * 60 * 1000;
 
@@ -35,6 +35,17 @@ describe("toDate", () => {
     const timestamp = Date.UTC(2026, 0, 31, 12);
 
     expect(toDate(timestamp)).toEqual(new Date(timestamp));
+  });
+});
+
+describe("shortFormatDate", () => {
+  test("formats a date with an abbreviated month and numeric day", () => {
+    expect(shortFormatDate(new Date(2026, 0, 31))).toBe("Jan 31");
+  });
+
+  test("returns Never when the date is null or undefined", () => {
+    expect(shortFormatDate(null)).toBe("Never");
+    expect(shortFormatDate(undefined)).toBe("Never");
   });
 });
 
