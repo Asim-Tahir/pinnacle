@@ -1,102 +1,205 @@
-import { useState } from "react";
+import { cx } from "cva";
+import {
+  Archive,
+  ArrowDownWideNarrow,
+  Bookmark as BookmarkIcon,
+  Home,
+  Plus,
+  Tag,
+} from "lucide-react";
 
 import "@/App.css";
-import heroImg from "@/assets/hero.png";
-import reactLogo from "@/assets/react.svg";
-import viteLogo from "@/assets/vite.svg";
+
+import BookmarkCard from "@/components/BookmarkCard";
+import Header from "@/components/layout/Header";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty";
+import type { BookmarkSortMode } from "@/contexts/BookmarkManager";
+import { useBookmarkDialog } from "@/hooks/useBookmarkDialog";
+import { useBookmarkManager } from "@/hooks/useBookmarkManager";
 
 function App() {
-  const [count, setCount] = useState(0);
+  const {
+    bookmarks,
+    hydrated,
+    persistenceError,
+    view,
+    setView,
+    query,
+    selectedTags,
+    clearSelectedTags,
+    toggleTag,
+    sortMode,
+    setSortMode,
+    visibleBookmarks,
+    tagCounts,
+    actionError,
+    blockedUrl,
+  } = useBookmarkManager();
+  const { openCreateDialog } = useBookmarkDialog();
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button type="button" className="counter" onClick={() => setCount((count) => count + 1)}>
-          Count is {count}
-        </button>
-      </section>
+    <div className="app-shell">
+      <aside className="sidebar">
+        <a className="brand" onClick={() => setView("active")}>
+          <span className="brand-mark">
+            <BookmarkIcon size={18} fill="currentColor" />
+          </span>
+          <span>Pinnacle</span>
+        </a>
 
-      <div className="ticks"></div>
+        <nav className="primary-nav" aria-label="Main navigation">
+          <button
+            className={`nav-item ${view === "active" ? "is-active" : ""}`}
+            type="button"
+            onClick={() => {
+              setView("active");
+            }}
+          >
+            <Home size={16} /> Home
+          </button>
+          <button
+            className={cx("nav-item", { "is-active": view === "archived" })}
+            type="button"
+            onClick={() => {
+              setView("archived");
+            }}
+          >
+            <Archive size={16} /> Archived
+            <span className="nav-count">
+              {bookmarks.filter((bookmark) => bookmark.archivedAt !== null).length}
+            </span>
+          </button>
+        </nav>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+        <div className="tag-section">
+          <div className="sidebar-label">
+            <span>Tags</span>
+            {selectedTags.length > 0 && (
+              <button type="button" onClick={clearSelectedTags}>
+                Clear
+              </button>
+            )}
+          </div>
+          <div className="tag-list">
+            {tagCounts.map(([tag, count]) => (
+              <label className="tag-filter" key={tag}>
+                <input
+                  type="checkbox"
+                  checked={selectedTags.includes(tag)}
+                  onChange={() => toggleTag(tag)}
+                />
+                <span>{tag}</span>
+                <small>{count}</small>
+              </label>
+            ))}
+            {tagCounts.length === 0 && <p className="empty-tags">Your tags will show here.</p>}
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <div className="sidebar-note">
+          <span className="note-icon">
+            <Tag size={16} />
+          </span>
+          <span>Saved on this device</span>
+        </div>
+      </aside>
+
+      <div className="main-column">
+        <Header />
+
+        <main className="main-content">
+          <div className="content-heading">
+            <div>
+              <h1>{view === "active" ? "All bookmarks" : "Archived bookmarks"}</h1>
+            </div>
+            {view === "active" && (
+              <label className="sort-control">
+                <ArrowDownWideNarrow size={16} />
+                <span className="sort-label">Sort by</span>
+                <select
+                  aria-label="Sort bookmarks"
+                  value={sortMode}
+                  onChange={(event) => setSortMode(event.target.value as BookmarkSortMode)}
+                >
+                  <option value="recommended">Recommended</option>
+                  <option value="recent">Recently viewed</option>
+                  <option value="name">Name</option>
+                </select>
+              </label>
+            )}
+          </div>
+
+          {(persistenceError || actionError) && (
+            <p className="status-message" role="alert">
+              {actionError || persistenceError}
+            </p>
+          )}
+          {blockedUrl && (
+            <p className="status-message" role="status">
+              Pop-up blocked.{" "}
+              <a href={blockedUrl} target="_blank" rel="noopener noreferrer">
+                Open bookmark
+              </a>
+            </p>
+          )}
+
+          {!hydrated ? (
+            <div className="library-message" role="status">
+              Loading your bookmarks...
+            </div>
+          ) : visibleBookmarks.length > 0 ? (
+            <section
+              className="bookmark-grid"
+              aria-label={view === "active" ? "Bookmarks" : "Archived bookmarks"}
+            >
+              {visibleBookmarks.map((bookmark) => (
+                <BookmarkCard
+                  key={bookmark.id}
+                  bookmark={bookmark}
+                  archived={view === "archived"}
+                />
+              ))}
+            </section>
+          ) : (
+            <Empty className="library-empty">
+              <EmptyHeader>
+                <EmptyMedia className="empty-mark">
+                  <BookmarkIcon size={24} />
+                </EmptyMedia>
+                <EmptyTitle>
+                  {query || selectedTags.length > 0
+                    ? "No matching bookmarks"
+                    : view === "archived"
+                      ? "Nothing archived yet"
+                      : "A good link belongs here"}
+                </EmptyTitle>
+                <EmptyDescription>
+                  {query || selectedTags.length > 0
+                    ? "Try a different search or clear your tag filters."
+                    : view === "archived"
+                      ? "Bookmarks you archive will be kept here."
+                      : "Keep the pages you come back to, all in one quiet place."}
+                </EmptyDescription>
+              </EmptyHeader>
+              {!query && selectedTags.length === 0 && view === "active" && (
+                <EmptyContent>
+                  <button className="add-button empty-add" type="button" onClick={openCreateDialog}>
+                    <Plus size={16} /> Add your first bookmark
+                  </button>
+                </EmptyContent>
+              )}
+            </Empty>
+          )}
+        </main>
+      </div>
+    </div>
   );
 }
 
