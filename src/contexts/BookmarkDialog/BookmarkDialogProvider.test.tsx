@@ -9,28 +9,32 @@ import { Bookmark } from "@/models";
 
 const bookmark = new Bookmark(BookmarkType.Active, "https://example.com/", "Example");
 
-function DialogControls() {
-  const { state: dialog, openCreateDialog, openEditDialog, closeDialog } = useBookmarkDialog();
+function BookmarkDialogControls() {
+  const { state, openCreateDialog, openEditDialog, closeDialog } = useBookmarkDialog();
 
   return (
     <div>
       <button onClick={openCreateDialog}>Create</button>
       <button onClick={() => openEditDialog(bookmark)}>Edit</button>
       <button onClick={closeDialog}>Close</button>
-      <p>{dialog.type}</p>
-      {dialog.type === "edit" && <p>{dialog.bookmark.name}</p>}
+      <p>{state.type}</p>
+      {state.type === "edit" && <p>{state.bookmark.name}</p>}
     </div>
   );
 }
 
-test("provides typed methods to open and close bookmark dialogs", async () => {
-  const screen = await page.render(
+function TestApp() {
+  return (
     <BookmarkManagerProvider>
       <BookmarkDialogProvider>
-        <DialogControls />
+        <BookmarkDialogControls />
       </BookmarkDialogProvider>
-    </BookmarkManagerProvider>,
+    </BookmarkManagerProvider>
   );
+}
+
+test("provides typed methods to open and close bookmark dialogs", async () => {
+  const screen = await page.render(<TestApp />);
 
   await expect.element(screen.getByText("closed")).toBeVisible();
 
