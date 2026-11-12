@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { toURL } from "@/utils/url";
 
 export interface GoogleFaviconProviderProps {
@@ -11,11 +13,15 @@ export default function GoogleFaviconProvider({
   onError,
   size = 32,
 }: GoogleFaviconProviderProps) {
-  const url = toURL(urlOrLink);
+  const url = useMemo(() => toURL(urlOrLink), [urlOrLink]);
 
-  const faviconURL = new URL("https://www.google.com/s2/favicons");
-  faviconURL.searchParams.set("domain", url.origin);
-  faviconURL.searchParams.set("sz", String(size));
+  const faviconURL = useMemo(() => {
+    const fURL = new URL("https://www.google.com/s2/favicons");
+    fURL.searchParams.set("domain", url.origin);
+    fURL.searchParams.set("sz", String(size));
+
+    return fURL;
+  }, [url.origin, size]);
 
   return (
     <img
