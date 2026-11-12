@@ -10,6 +10,8 @@ import {
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
 import { Bookmark, type IUpdateBookmark } from "@/models";
 
+import "./BookmarkDialogProvider.css";
+
 interface BookmarkForm {
   url: string;
   name: string;
