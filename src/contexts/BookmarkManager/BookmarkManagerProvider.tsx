@@ -39,6 +39,16 @@ export function BookmarkManagerProvider({ children }: React.PropsWithChildren) {
     void hydrate().catch(() => undefined);
   }, [hydrate]);
 
+  const activeBookmarks = useMemo(
+    () => bookmarks.filter((bookmark) => bookmark.archivedAt === null),
+    [bookmarks],
+  );
+
+  const archivedBookmarks = useMemo(
+    () => bookmarks.filter((bookmark) => bookmark.archivedAt !== null),
+    [bookmarks],
+  );
+
   const visibleBookmarks = useMemo(() => {
     let result =
       view === "active" ? rankActiveBookmarks(bookmarks) : sortArchivedBookmarks(bookmarks);
@@ -122,6 +132,8 @@ export function BookmarkManagerProvider({ children }: React.PropsWithChildren) {
 
   const value: BookmarkManagerContextValue = {
     bookmarks,
+    activeBookmarks,
+    archivedBookmarks,
     visibleBookmarks,
     tagCounts,
     hydrated,

@@ -7,6 +7,8 @@ export type BookmarkSortMode = "recommended" | "recent" | "name";
 
 export interface BookmarkManagerContextValue {
   bookmarks: Bookmark[];
+  activeBookmarks: Bookmark[];
+  archivedBookmarks: Bookmark[];
   visibleBookmarks: Bookmark[];
   tagCounts: [string, number][];
   hydrated: boolean;
