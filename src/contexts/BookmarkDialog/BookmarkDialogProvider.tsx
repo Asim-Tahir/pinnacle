@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { TagField } from "@/components/ui/tag-field";
 import {
   BookmarkDialogContext,
   type BookmarkDialogContextValue,
@@ -13,14 +14,14 @@ interface BookmarkForm {
   url: string;
   name: string;
   description: string;
-  tags: string;
+  tags: string[];
 }
 
 const emptyForm: BookmarkForm = {
   url: "",
   name: "",
   description: "",
-  tags: "",
+  tags: [],
 };
 
 export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
@@ -41,7 +42,7 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
       url: bookmark.url.toString(),
       name: bookmark.name,
       description: bookmark.description,
-      tags: [...bookmark.tags].join(", "),
+      tags: Array.from(bookmark.tags),
     });
     setFormError("");
     setDialogState({ type: "edit", bookmark });
@@ -59,10 +60,7 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
       url: form.url,
       name: form.name.trim(),
       description: form.description.trim(),
-      tags: form.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter(Boolean),
+      tags: form.tags,
     };
 
     try {
@@ -132,15 +130,13 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
                 onChange={(event) => setForm({ ...form, description: event.target.value })}
               />
             </label>
-            <label>
-              <span>Tags</span>
-              <input
-                type="text"
-                placeholder="Design, Reading, Work"
-                value={form.tags}
-                onChange={(event) => setForm({ ...form, tags: event.target.value })}
-              />
-            </label>
+            <TagField
+              className="bookmark-tags-field"
+              label="Tags"
+              placeholder="Design, Reading, Work"
+              value={form.tags}
+              onChange={(tags) => setForm({ ...form, tags })}
+            />
             {formError && (
               <p className="form-error" id="bookmark-form-error" role="alert">
                 {formError}
