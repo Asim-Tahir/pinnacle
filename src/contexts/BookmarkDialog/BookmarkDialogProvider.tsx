@@ -10,6 +10,13 @@ import {
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
 import { Bookmark, type IUpdateBookmark } from "@/models";
 
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/components/ui/İnput-group";
 import "./BookmarkDialogProvider.css";
 
 interface BookmarkForm {
@@ -104,15 +111,21 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
               <span>
                 URL <b aria-hidden="true">*</b>
               </span>
-              <input
-                autoFocus
-                type="url"
-                required
-                placeholder="https://example.com"
-                value={form.url}
-                onChange={(event) => setForm({ ...form, url: event.target.value })}
-                aria-describedby={formError ? "bookmark-form-error" : undefined}
-              />
+              <InputGroup>
+                <InputGroupAddon>
+                  <InputGroupText>{urlPrefix}</InputGroupText>
+                </InputGroupAddon>
+                <InputGroupInput
+                  autoFocus
+                  type="text"
+                  inputMode="url"
+                  required
+                  placeholder="example.com"
+                  value={form.url}
+                  onChange={(event) => setForm({ ...form, url: event.target.value })}
+                  aria-describedby={formError ? "bookmark-form-error" : undefined}
+                />
+              </InputGroup>
             </label>
             <label>
               <span>Name</span>
