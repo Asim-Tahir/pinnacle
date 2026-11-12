@@ -41,10 +41,7 @@
   }
 
   .header-profile-avatar {
-    @apply grid size-8 place-items-center;
-    @apply text-primary-foreground text-xs font-bold;
-    @apply bg-primary/90;
-    @apply border-2 border-primary-foreground rounded-full;
+    @apply border-2 border-ring rounded-full;
   }
 
   @media (max-width: 540px) {

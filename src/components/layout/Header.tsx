@@ -1,5 +1,6 @@
 import { Plus, Search, X } from "lucide-react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useBookmarkDialog } from "@/hooks/useBookmarkDialog";
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
 
@@ -35,9 +36,13 @@ export default function Header() {
         >
           <Plus size={17} /> <span>Add Bookmark</span>
         </button>
-        <span className="header-profile-avatar" aria-label="Local bookmark library">
-          P
-        </span>
+        <Avatar className="header-profile-avatar" role="img" aria-label="Current user avatar">
+          <AvatarImage
+            src="https://api.dicebear.com/10.x/lorelei-neutral/svg?seed=Aneka&backgroundColor=dff0eb&eyebrowsColor=0f3d38&eyesColor=0f3d38&frecklesColor=0f3d38&glassesColor=0f3d38&mouthColor=0f3d38&noseColor=0f3d38"
+            alt="Current user avatar"
+          />
+          <AvatarFallback>AN</AvatarFallback>
+        </Avatar>
       </div>
     </header>
   );
