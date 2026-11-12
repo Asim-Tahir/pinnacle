@@ -1,67 +1,66 @@
 .bookmark-dialog[data-slot="dialog-content"] {
-  @apply gap-[19px] p-6;
-  @apply text-[var(--ink)];
-  @apply bg-white rounded-[10px];
-  @apply shadow-[0_24px_80px_rgb(18_43_39_/_22%)];
-  width: min(100% - 32px, 480px);
-  max-width: 480px;
+  @apply gap-5 ps-4 pe-2 py-6;
+  @apply text-card-foreground;
+  @apply bg-card rounded-2.5;
+  @apply shadow-2xl;
+  @apply min-w-[100%-2rem];
+  @apply max-w-screen-sm;
 }
 
 .bookmark-dialog [data-slot="dialog-title"] {
-  @apply text-[var(--ink)] text-xl font-[680];
-  font-family: var(--font-display);
+  @apply text-card-foreground text-base font-bold;
 }
 
 .bookmark-form {
-  @apply py-4;
-  @apply grid gap-5;
-  @apply overflow-auto max-h-[calc(100dvh-200px)];
+  @apply pe-2;
+  @apply grid gap-6;
+  @apply overflow-auto;
+  @apply max-h-[calc(100dvh-12rem)];
 }
 
 .bookmark-form > label {
-  @apply grid gap-[6px];
-  @apply text-[#384b48] text-xs font-[650];
+  @apply grid gap-2;
+  @apply text-card-foreground text-xs font-bold;
 }
 
 .bookmark-form > .bookmark-tags-field {
-  @apply grid gap-[6px];
+  @apply grid gap-1.5;
 }
 
 .bookmark-tags-field > [data-slot="label"] {
-  @apply text-[#384b48] text-xs font-[650];
+  @apply text-card-foreground text-xs font-bold;
 }
 
 .bookmark-form label b {
-  @apply text-[#b6483c];
+  @apply text-destructive;
 }
 
 .bookmark-form input,
 .bookmark-form textarea {
-  font: inherit;
-  @apply w-full min-h-[38px] px-[10px] py-2;
-  @apply text-[#1c302f] text-[13px] font-normal;
-  @apply bg-white border border-[#dce6e3] rounded-[6px];
+  @apply w-full min-h-10 px-3;
+  @apply text-muted-foreground text-xs font-normal;
+  @apply bg-muted border border-border rounded-1.5;
   @apply outline-0;
 }
 
 .bookmark-form textarea {
-  @apply min-h-[78px] resize-y;
+  @apply min-h-20 resize-y;
 }
 
 .bookmark-form input:focus,
 .bookmark-form textarea:focus {
-  @apply border-[#8cb4ad];
-  box-shadow: 0 0 0 3px rgb(7 91 85 / 9%);
+  @apply border-border;
+  @apply shadow-sm;
 }
 
 .bookmark-form input::placeholder,
 .bookmark-form textarea::placeholder {
-  @apply text-[#9aa6a3];
+  @apply text-muted-foreground;
 }
 
 .form-error {
   @apply mt-1 mb-0;
-  @apply text-[#a63d32] text-xs;
+  @apply text-destructive text-xs;
 }
 
 .form-actions {
@@ -70,23 +69,17 @@
 }
 
 .cancel-button {
-  font: inherit;
   @apply min-h-10 px-3;
-  @apply text-[#495b58];
-  @apply bg-white border border-[var(--line)] rounded-2;
+  @apply text-foreground;
+  @apply border border-border rounded-2;
+  @apply bg-secondary hover:bg-secondary-foreground;
   @apply cursor-pointer;
 }
 
 .cancel-button:hover {
-  @apply bg-[#f5f8f7];
+  @apply bg-background;
 }
 
 .bookmark-dialog button:focus-visible {
-  @apply outline-2 outline-[var(--teal)] outline-offset-2;
-}
-
-@media (max-width: 540px) {
-  .bookmark-dialog[data-slot="dialog-content"] {
-    @apply p-5;
-  }
+  @apply outline outline-primary outline-offset-1;
 }

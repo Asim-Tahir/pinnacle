@@ -1,34 +1,20 @@
 :root {
-  @apply font-normal text-[#1c302f] bg-[#edf4f2];
+  @apply font-sans font-normal text-foreground bg-background;
+  @apply antialiased;
 
-  font-family: "Avenir Next", "Segoe UI", sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   font-optical-sizing: auto;
   font-kerning: normal;
   font-feature-settings: "kern";
-  --font-display: "Avenir Next", "Trebuchet MS", sans-serif;
-}
-
-* {
-  @apply box-border;
 }
 
 html {
-  @apply min-w-[320px] min-h-full;
+  @apply min-w-80 min-h-full;
 }
 
 body {
-  @apply min-w-[320px] min-h-screen m-0;
-}
-
-button,
-input,
-textarea,
-select {
-  font: inherit;
+  @apply min-w-80 min-h-[100dvh] m-0;
 }
 
 button {
@@ -36,5 +22,5 @@ button {
 }
 
 #root {
-  @apply min-h-screen;
+  @apply min-h-[100dvh];
 }
