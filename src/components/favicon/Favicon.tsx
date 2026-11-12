@@ -1,7 +1,8 @@
 import { GlobeIcon } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import { FaviconProvider } from "@/enums/favicon";
-import { toURL } from "@/utils/url";
+
 import {
   DuckDuckGoFaviconProvider,
   GoogleFaviconProvider,
@@ -18,12 +19,10 @@ export interface FaviconProviderProps {
   onError?: React.ReactEventHandler<HTMLImageElement>;
 }
 
-const providers = [FaviconProvider.Google, FaviconProvider.DuckDuckGo, FaviconProvider.Yandex];
+const providers: FaviconProvider[] = [FaviconProvider.DuckDuckGo];
 
 export default function Favicon({ urlOrLink }: FaviconProps) {
-  const url = toURL(urlOrLink);
-
-  const [provider, setProvider] = useState<FaviconProvider | null>(FaviconProvider.Google);
+  const [provider, setProvider] = useState<FaviconProvider | null>(FaviconProvider.DuckDuckGo);
 
   const onError: React.ReactEventHandler<HTMLImageElement> = () => {
     setProvider((current) => {
