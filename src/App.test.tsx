@@ -32,7 +32,7 @@ describe("bookmark dashboard", () => {
     const screen = await page.render(<TestApp />);
 
     await screen.getByRole("button", { name: "Add bookmark" }).click();
-    await screen.getByPlaceholder("https://example.com").fill("https://atlas.example/");
+    await screen.getByPlaceholder("example.com").fill("atlas.example/");
     await screen.getByPlaceholder("A name to remember it by").fill("Atlas");
     const tagInput = screen.getByRole("textbox", { name: "Tags" });
     await tagInput.fill("Design, Reading");
