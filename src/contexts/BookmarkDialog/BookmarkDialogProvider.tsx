@@ -19,7 +19,7 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/İnput-group";
-import { toURL } from "@/utils/url";
+import { urlToString } from "@/utils/url";
 
 import "./BookmarkDialogProvider.css";
 
@@ -52,7 +52,7 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
 
   function openEditDialog(bookmark: Bookmark) {
     setForm({
-      url: bookmark.url.toString(),
+      url: urlToString(bookmark.url),
       name: bookmark.name,
       description: bookmark.description,
       tags: Array.from(bookmark.tags),
@@ -99,11 +99,9 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
   const urlInputValue = form.url.replace(/^https?:\/\//i, "");
 
   function handleURLChange(value: string) {
-    const url = toURL(`https://${value.trim()}`);
-
     setForm({
       ...form,
-      url: url.toString(),
+      url: `https://${value.trim()}`,
     });
   }
 
