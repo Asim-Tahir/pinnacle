@@ -1,11 +1,27 @@
 import { theme as defaultTheme } from "@unocss/preset-wind4";
-import { defineConfig, presetWind4, transformerDirectives } from "unocss";
+import { defineConfig, presetWebFonts, presetWind4, transformerDirectives } from "unocss";
 
 export default defineConfig({
   outputToCssLayers: true,
   presets: [
     presetWind4({
       dark: "media",
+    }),
+    presetWebFonts({
+      provider: "google",
+      fonts: {
+        sans: [
+          {
+            name: "Inter",
+            weights: ["400", "500", "600", "700"],
+            italic: false,
+          },
+          {
+            name: "sans-serif",
+            provider: "none",
+          },
+        ],
+      },
     }),
   ],
   transformers: [transformerDirectives()],
