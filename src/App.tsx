@@ -19,19 +19,14 @@ import { useBookmarkManager } from "@/hooks/useBookmarkManager";
 
 function App() {
   const {
-    bookmarks,
     hydrated,
     persistenceError,
     view,
-    setView,
     query,
     selectedTags,
-    clearSelectedTags,
-    toggleTag,
     sortMode,
     setSortMode,
     visibleBookmarks,
-    tagCounts,
     actionError,
     blockedUrl,
   } = useBookmarkManager();
