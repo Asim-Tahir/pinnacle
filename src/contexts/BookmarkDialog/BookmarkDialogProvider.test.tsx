@@ -94,3 +94,35 @@ test("keeps the form open when the URL is invalid", async () => {
   await expect.element(screen.getByRole("heading", { name: "Add a bookmark" })).toBeVisible();
   await expect.element(screen.getByText("Saved: none")).toBeVisible();
 });
+
+test.each(["a.co", "ab.c"])(
+  "rejects %s because the domain and TLD require two characters",
+  async (invalidURL) => {
+    const screen = await page.render(<TestApp />);
+
+    await screen.getByRole("button", { name: "Create" }).click();
+    const urlInput = screen.getByPlaceholder("example.com");
+
+    await urlInput.fill(invalidURL);
+    expect((urlInput.element() as HTMLInputElement).validity.patternMismatch).toBe(true);
+    await screen.getByRole("button", { name: "Add bookmark" }).click();
+    await expect.element(screen.getByRole("heading", { name: "Add a bookmark" })).toBeVisible();
+    await expect.element(screen.getByText("Saved: none")).toBeVisible();
+  },
+);
+
+test.each(["ab.co", "atlas.example"])(
+  "accepts %s with a valid domain and TLD",
+  async (validURL) => {
+    const screen = await page.render(<TestApp />);
+
+    await screen.getByRole("button", { name: "Create" }).click();
+    const urlInput = screen.getByPlaceholder("example.com");
+
+    await urlInput.fill(validURL);
+    expect((urlInput.element() as HTMLInputElement).validity.patternMismatch).toBe(false);
+    await screen.getByPlaceholder("A name to remember it by").fill("Valid bookmark");
+    await screen.getByRole("button", { name: "Add bookmark" }).click();
+    await expect.element(screen.getByText(/^Saved: Valid bookmark:/)).toBeVisible();
+  },
+);
