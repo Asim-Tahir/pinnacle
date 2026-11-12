@@ -136,6 +136,18 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
                   placeholder="example.com"
                   value={urlInputValue}
                   onChange={(event) => handleURLChange(event.target.value)}
+                  onInvalid={(event) => {
+                    const input = event.currentTarget;
+                    input.setCustomValidity(
+                      input.validity.patternMismatch
+                        ? "Enter a valid domain like example.com, without https://."
+                        : "",
+                    );
+                  }}
+                  onInput={(event) => {
+                    const input = event.currentTarget;
+                    input.setCustomValidity("");
+                  }}
                   aria-describedby={formError ? "bookmark-form-error" : undefined}
                 />
               </InputGroup>
