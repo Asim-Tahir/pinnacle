@@ -7,15 +7,19 @@ import App from "@/App";
 import { BookmarkDialogProvider } from "@/contexts/BookmarkDialog";
 import { BookmarkManagerProvider } from "@/contexts/BookmarkManager";
 
+function TestApp() {
+  return (
+    <BookmarkManagerProvider>
+      <BookmarkDialogProvider>
+        <App />
+      </BookmarkDialogProvider>
+    </BookmarkManagerProvider>
+  );
+}
+
 describe("bookmark dashboard", () => {
   test("renders the bookmark manager home view", async () => {
-    const screen = await page.render(
-      <BookmarkManagerProvider>
-        <BookmarkDialogProvider>
-          <App />
-        </BookmarkDialogProvider>
-      </BookmarkManagerProvider>,
-    );
+    const screen = await page.render(<TestApp />);
 
     await expect.element(screen.getByRole("heading", { name: "All bookmarks" })).toBeVisible();
     await expect
@@ -25,13 +29,7 @@ describe("bookmark dashboard", () => {
   });
 
   test("confirms bookmark deletion with an alert dialog", async () => {
-    const screen = await page.render(
-      <BookmarkManagerProvider>
-        <BookmarkDialogProvider>
-          <App />
-        </BookmarkDialogProvider>
-      </BookmarkManagerProvider>,
-    );
+    const screen = await page.render(<TestApp />);
 
     await screen.getByRole("button", { name: "Add bookmark" }).click();
     await screen.getByPlaceholder("https://example.com").fill("https://atlas.example/");
