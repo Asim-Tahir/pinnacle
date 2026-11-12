@@ -1,17 +1,10 @@
-import { cx } from "cva";
-import {
-  Archive,
-  ArrowDownWideNarrow,
-  Bookmark as BookmarkIcon,
-  Home,
-  Plus,
-  Tag,
-} from "lucide-react";
+import { ArrowDownWideNarrow, Bookmark as BookmarkIcon, Plus } from "lucide-react";
 
 import "@/App.css";
 
 import BookmarkCard from "@/components/BookmarkCard";
 import Header from "@/components/layout/Header";
+import Sidebar from "@/components/layout/Sidebar";
 import {
   Empty,
   EmptyContent,
@@ -46,70 +39,7 @@ function App() {
 
   return (
     <div className="app-shell">
-      <aside className="sidebar">
-        <a className="brand" onClick={() => setView("active")}>
-          <span className="brand-mark">
-            <BookmarkIcon size={18} fill="currentColor" />
-          </span>
-          <span>Pinnacle</span>
-        </a>
-
-        <nav className="primary-nav" aria-label="Main navigation">
-          <button
-            className={`nav-item ${view === "active" ? "is-active" : ""}`}
-            type="button"
-            onClick={() => {
-              setView("active");
-            }}
-          >
-            <Home size={16} /> Home
-          </button>
-          <button
-            className={cx("nav-item", { "is-active": view === "archived" })}
-            type="button"
-            onClick={() => {
-              setView("archived");
-            }}
-          >
-            <Archive size={16} /> Archived
-            <span className="nav-count">
-              {bookmarks.filter((bookmark) => bookmark.archivedAt !== null).length}
-            </span>
-          </button>
-        </nav>
-
-        <div className="tag-section">
-          <div className="sidebar-label">
-            <span>Tags</span>
-            {selectedTags.length > 0 && (
-              <button type="button" onClick={clearSelectedTags}>
-                Clear
-              </button>
-            )}
-          </div>
-          <div className="tag-list">
-            {tagCounts.map(([tag, count]) => (
-              <label className="tag-filter" key={tag}>
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(tag)}
-                  onChange={() => toggleTag(tag)}
-                />
-                <span>{tag}</span>
-                <small>{count}</small>
-              </label>
-            ))}
-            {tagCounts.length === 0 && <p className="empty-tags">Your tags will show here.</p>}
-          </div>
-        </div>
-
-        <div className="sidebar-note">
-          <span className="note-icon">
-            <Tag size={16} />
-          </span>
-          <span>Saved on this device</span>
-        </div>
-      </aside>
+      <Sidebar />
 
       <div className="main-column">
         <Header />
