@@ -91,8 +91,16 @@ test("keeps the form open when the URL is invalid", async () => {
   await screen.getByRole("button", { name: "Add bookmark" }).click();
 
   await expect.element(urlInput).toBeInvalid();
+  await expect
+    .element(screen.getByText("Enter a valid domain like example.com, without https://."))
+    .toBeVisible();
   await expect.element(screen.getByRole("heading", { name: "Add a bookmark" })).toBeVisible();
   await expect.element(screen.getByText("Saved: none")).toBeVisible();
+
+  await urlInput.fill("example.com");
+  await expect
+    .element(screen.getByText("Enter a valid domain like example.com, without https://."))
+    .not.toBeInTheDocument();
 });
 
 test.each(["x.c", "y.b"])(

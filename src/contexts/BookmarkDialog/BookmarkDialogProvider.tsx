@@ -9,6 +9,7 @@ import {
   type BookmarkDialogState,
 } from "@/contexts/BookmarkDialog";
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
+import { useConstraintValidation } from "@/hooks/useConstraintValidation";
 import { Bookmark, type IUpdateBookmark } from "@/models";
 import { normalizeBookmarkURL } from "@/utils/bookmark";
 
@@ -41,6 +42,14 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
   const [dialogState, setDialogState] = useState<BookmarkDialogState>({ type: "closed" });
   const [form, setForm] = useState<BookmarkForm>(emptyForm);
   const [formError, setFormError] = useState("");
+  const { inputProps: urlInputProps, ...urlValidation } = useConstraintValidation<HTMLInputElement>(
+    {
+      getCustomValidity: (input) =>
+        input.validity.patternMismatch
+          ? "Enter a valid domain like example.com, without https://."
+          : "",
+    },
+  );
 
   const { createBookmark, updateBookmark } = useBookmarkManager();
 
@@ -136,21 +145,22 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
                   placeholder="example.com"
                   value={urlInputValue}
                   onChange={(event) => handleURLChange(event.target.value)}
-                  onInvalid={(event) => {
-                    const input = event.currentTarget;
-                    input.setCustomValidity(
-                      input.validity.patternMismatch
-                        ? "Enter a valid domain like example.com, without https://."
-                        : "",
-                    );
-                  }}
-                  onInput={(event) => {
-                    const input = event.currentTarget;
-                    input.setCustomValidity("");
-                  }}
-                  aria-describedby={formError ? "bookmark-form-error" : undefined}
+                  {...urlInputProps}
+                  aria-describedby={
+                    [
+                      urlValidation.isInvalid ? "bookmark-url-error" : undefined,
+                      formError ? "bookmark-form-error" : undefined,
+                    ]
+                      .filter(Boolean)
+                      .join(" ") || undefined
+                  }
                 />
               </InputGroup>
+              {urlValidation.isInvalid && (
+                <p className="form-error" id="bookmark-url-error" role="alert">
+                  {urlValidation.errorMessage}
+                </p>
+              )}
             </label>
             <label>
               <span>Name</span>
