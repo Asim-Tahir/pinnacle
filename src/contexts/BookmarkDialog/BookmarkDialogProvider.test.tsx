@@ -95,8 +95,8 @@ test("keeps the form open when the URL is invalid", async () => {
   await expect.element(screen.getByText("Saved: none")).toBeVisible();
 });
 
-test.each(["a.co", "ab.c"])(
-  "rejects %s because the domain and TLD require two characters",
+test.each(["x.c", "y.b"])(
+  "rejects %s because the domain require one and TLD require two characters",
   async (invalidURL) => {
     const screen = await page.render(<TestApp />);
 
@@ -111,7 +111,7 @@ test.each(["a.co", "ab.c"])(
   },
 );
 
-test.each(["ab.co", "atlas.example"])(
+test.each(["x.com", "ab.co", "atlas.example"])(
   "accepts %s with a valid domain and TLD",
   async (validURL) => {
     const screen = await page.render(<TestApp />);
