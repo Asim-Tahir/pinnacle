@@ -104,18 +104,17 @@ export function createBookmarkStore(storage: Storage = localStorage) {
           update: (bookmark: Bookmark) => void,
         ): { bookmarks: Bookmark[]; result: Bookmark } => {
           const index = bookmarks.findIndex((bookmark) => bookmark.id === id);
-          if (index === -1) {
+          if (index < 0) {
             throw new Error("Bookmark not found.");
           }
 
           const updatedBookmark = bookmarks[index].clone();
           update(updatedBookmark);
 
-          const nextBookmarks = structuredClone(bookmarks);
-          nextBookmarks[index] = updatedBookmark;
+          bookmarks[index] = updatedBookmark;
 
           return {
-            bookmarks: nextBookmarks,
+            bookmarks,
             result: updatedBookmark,
           };
         };
