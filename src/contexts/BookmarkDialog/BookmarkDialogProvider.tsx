@@ -139,21 +139,25 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
             </label>
             <label>
               <span>Name</span>
-              <input
-                type="text"
-                placeholder="A name to remember it by"
-                value={form.name}
-                onChange={(event) => setForm({ ...form, name: event.target.value })}
-              />
+              <InputGroup>
+                <InputGroupInput
+                  type="text"
+                  placeholder="A name to remember it by"
+                  value={form.name}
+                  onChange={(event) => setForm({ ...form, name: event.target.value })}
+                />
+              </InputGroup>
             </label>
             <label>
               <span>Description</span>
-              <textarea
-                rows={3}
-                placeholder="What makes this page useful?"
-                value={form.description}
-                onChange={(event) => setForm({ ...form, description: event.target.value })}
-              />
+              <InputGroup>
+                <InputGroupTextarea
+                  rows={3}
+                  placeholder="What makes this page useful?"
+                  value={form.description}
+                  onChange={(event) => setForm({ ...form, description: event.target.value })}
+                />
+              </InputGroup>
             </label>
             <TagField
               className="bookmark-tags-field"
