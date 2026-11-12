@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import { GlobeIcon } from "lucide-react";
 
 import { FaviconProvider } from "@/enums/favicon";
 import { toURL } from "@/utils/url";
@@ -44,6 +44,9 @@ export default function Favicon({ urlOrLink }: FaviconProps) {
 
       case FaviconProvider.Yandex:
         return YandexFaviconProvider;
+
+      default:
+        return null;
     }
   }, [provider]);
 
@@ -52,7 +55,7 @@ export default function Favicon({ urlOrLink }: FaviconProps) {
       {Provider ? (
         <Provider urlOrLink={urlOrLink} onError={onError} />
       ) : (
-        <span className="favicon-fallback">{url.hostname.slice(0, 1).toUpperCase()}</span>
+        <GlobeIcon data-provider="default" />
       )}
     </span>
   );
