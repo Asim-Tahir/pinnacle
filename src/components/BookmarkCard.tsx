@@ -55,14 +55,20 @@ export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) 
     <Card className="bookmark-card" role="article">
       <CardHeader className="bookmark-card-header">
         <Favicon urlOrLink={url} />
-        <button
+        <a
           className="bookmark-card-title"
-          type="button"
-          onClick={() => void openBookmark(bookmark)}
+          href={bookmark.url.toString()}
+          target="_top"
+          rel="noopener noreferrer"
+          aria-label={`Open ${displayBookmark(bookmark)} in current tab`}
+          onClick={(event) => {
+            event.preventDefault();
+            void openBookmark(bookmark);
+          }}
         >
           <span>{displayBookmark(bookmark)}</span>
           <small>{url.hostname}</small>
-        </button>
+        </a>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
@@ -96,10 +102,16 @@ export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) 
           </DropdownMenuContent>
         </DropdownMenu>
       </CardHeader>
-      <button
+      <a
         className="bookmark-card-open-area"
-        type="button"
-        onClick={() => void openBookmark(bookmark)}
+        href={bookmark.url.toString()}
+        target="_top"
+        rel="noopener noreferrer"
+        aria-label={`Open ${displayBookmark(bookmark)} in current tab`}
+        onClick={(event) => {
+          event.preventDefault();
+          void openBookmark(bookmark);
+        }}
       >
         <span className="bookmark-card-description">
           {bookmark.description || "No description added."}
@@ -113,7 +125,7 @@ export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) 
             ))}
           </span>
         )}
-      </button>
+      </a>
 
       <CardFooter className="bookmark-card-footer">
         <span title="Times opened">
