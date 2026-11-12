@@ -102,6 +102,30 @@ test("hydrates persisted bookmarks with defaults for missing fields", async () =
   expect(JSON.parse(localStorage.getItem(BOOKMARK_STORAGE_KEY)!).version).toBe(0);
 });
 
+test("repairs malformed persisted tags so the bookmark can be edited", async () => {
+  localStorage.setItem(
+    BOOKMARK_STORAGE_KEY,
+    JSON.stringify({
+      state: {
+        bookmarks: [{ ...getOldBookmark(), tags: {} }],
+      },
+      version: 0,
+    }),
+  );
+
+  const store = createBookmarkStore();
+  await store.getState().hydrate();
+
+  expect(store.getState().bookmarks[0].tags).toEqual(new Set());
+
+  await store.getState().partialUpdateBookmark("old-id", { name: "Edited" });
+
+  expect(store.getState().bookmarks[0].name).toBe("Edited");
+  expect(JSON.parse(localStorage.getItem(BOOKMARK_STORAGE_KEY)!).state.bookmarks[0].tags).toEqual(
+    [],
+  );
+});
+
 test("uses the persist envelope and rehydrates Bookmark instances", async () => {
   const store = createBookmarkStore();
   await store.getState().hydrate();
