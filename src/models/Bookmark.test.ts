@@ -1,23 +1,28 @@
 import { describe, expect, test } from "vitest";
 
 import { BookmarkType } from "@/enums";
-import { Bookmark } from "@/models/Bookmark";
+import { Bookmark, type IBookmarkSerializable } from "@/models/Bookmark";
+
+function mockBookmark(overrides: Partial<IBookmarkSerializable> = {}): Bookmark {
+  return Bookmark.fromJSON({
+    id: "761b55e1-e29a-59d1-94e4-e58ff250d86e",
+    type: BookmarkType.Archived,
+    url: "https://example.com/",
+    name: "Example",
+    description: "A useful site",
+    tags: ["Work"],
+    createdAt: "2026-01-01T12:00:00.000Z",
+    updatedAt: "2026-01-01T14:24:34.754Z",
+    viewCount: 3,
+    lastViewedAt: "2026-01-04T12:00:00.000Z",
+    archivedAt: "2026-01-03T12:00:00.000Z",
+    ...overrides,
+  });
+}
 
 describe("Bookmark", () => {
   test("clones bookmark state into an independent instance", () => {
-    const bookmark = new Bookmark(
-      BookmarkType.Archived,
-      "https://example.com/",
-      "Example",
-      "A useful site",
-      ["Work"],
-    );
-    bookmark.id = "bookmark-id";
-    bookmark.createdAt = new Date("2026-01-01T00:00:00.000Z");
-    bookmark.updatedAt = new Date("2026-01-02T00:00:00.000Z");
-    bookmark.archivedAt = new Date("2026-01-03T00:00:00.000Z");
-    bookmark.viewCount = 3;
-    bookmark.lastViewedAt = new Date("2026-01-04T00:00:00.000Z");
+    const bookmark = mockBookmark();
 
     const cloned = bookmark.clone();
 
