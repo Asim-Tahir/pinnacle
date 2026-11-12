@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { BOOKMARK_URL_PATTERN } from "@/constants";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { TagField } from "@/components/ui/tag-field";
+import { BOOKMARK_URL_PATTERN } from "@/constants";
 import {
   BookmarkDialogContext,
   type BookmarkDialogContextValue,
@@ -19,6 +19,8 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@/components/ui/İnput-group";
+import { toURL } from "@/utils/url";
+
 import "./BookmarkDialogProvider.css";
 
 interface BookmarkForm {
@@ -94,12 +96,15 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
   };
 
   const editingBookmark = dialogState.type === "edit" ? dialogState.bookmark : null;
-  const urlPrefix = /^(https?:\/\/)/i.exec(form.url)?.[0] ?? "https://";
   const urlInputValue = form.url.replace(/^https?:\/\//i, "");
 
   function handleURLChange(value: string) {
-    const hasScheme = /^[a-z][a-z\d+.-]*:(?!\d)/i.test(value);
-    setForm({ ...form, url: hasScheme ? value : `${urlPrefix}${value}` });
+    const url = toURL(`https://${value.trim()}`);
+
+    setForm({
+      ...form,
+      url: url.toString(),
+    });
   }
 
   return (
@@ -122,7 +127,7 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
               </span>
               <InputGroup>
                 <InputGroupAddon>
-                  <InputGroupText>{urlPrefix}</InputGroupText>
+                  <InputGroupText>https://</InputGroupText>
                 </InputGroupAddon>
                 <InputGroupInput
                   autoFocus
