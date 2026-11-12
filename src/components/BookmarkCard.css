@@ -86,12 +86,11 @@
     @apply hover:text-primary hover:bg-secondary;
   }
 
-  .bookmark-card-open-area {
+  .bookmark-card-body {
     @apply flex flex-1 flex-col items-stretch;
     @apply gap-2.5 p-3;
-    @apply text-left;
+    @apply text-start;
     @apply bg-transparent border-0;
-    @apply cursor-pointer;
   }
 
   .bookmark-card-description {
