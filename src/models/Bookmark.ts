@@ -146,9 +146,7 @@ export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBook
       bookmark.id = data.id;
     }
 
-    if (data.createdAt) {
-      bookmark.createdAt = toDate(data.createdAt);
-    }
+    bookmark.createdAt = data.createdAt ? toDate(data.createdAt) : new Date();
     bookmark.updatedAt = data.updatedAt ? toDate(data.updatedAt) : null;
     bookmark.archivedAt = data.archivedAt ? toDate(data.archivedAt) : null;
     if (typeof data.viewCount === "number") {
