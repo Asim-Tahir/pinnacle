@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { BOOKMARK_URL_PATTERN } from "@/constants";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { TagField } from "@/components/ui/tag-field";
 import {
@@ -9,6 +10,7 @@ import {
 } from "@/contexts/BookmarkDialog";
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
 import { Bookmark, type IUpdateBookmark } from "@/models";
+import { normalizeBookmarkURL } from "@/utils/bookmark";
 
 import {
   InputGroup,
@@ -65,14 +67,14 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
     event.preventDefault();
     setFormError("");
 
-    const data: IUpdateBookmark = {
-      url: form.url,
-      name: form.name.trim(),
-      description: form.description.trim(),
-      tags: form.tags,
-    };
-
     try {
+      const data: IUpdateBookmark = {
+        url: normalizeBookmarkURL(form.url),
+        name: form.name.trim(),
+        description: form.description.trim(),
+        tags: form.tags,
+      };
+
       if (dialogState.type === "edit") {
         await updateBookmark(dialogState.bookmark.id, data);
       } else if (dialogState.type === "create") {
@@ -92,6 +94,13 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
   };
 
   const editingBookmark = dialogState.type === "edit" ? dialogState.bookmark : null;
+  const urlPrefix = /^(https?:\/\/)/i.exec(form.url)?.[0] ?? "https://";
+  const urlInputValue = form.url.replace(/^https?:\/\//i, "");
+
+  function handleURLChange(value: string) {
+    const hasScheme = /^[a-z][a-z\d+.-]*:(?!\d)/i.test(value);
+    setForm({ ...form, url: hasScheme ? value : `${urlPrefix}${value}` });
+  }
 
   return (
     <BookmarkDialogContext.Provider value={value}>
@@ -119,10 +128,11 @@ export function BookmarkDialogProvider({ children }: React.PropsWithChildren) {
                   autoFocus
                   type="text"
                   inputMode="url"
+                  pattern={BOOKMARK_URL_PATTERN.source}
                   required
                   placeholder="example.com"
-                  value={form.url}
-                  onChange={(event) => setForm({ ...form, url: event.target.value })}
+                  value={urlInputValue}
+                  onChange={(event) => handleURLChange(event.target.value)}
                   aria-describedby={formError ? "bookmark-form-error" : undefined}
                 />
               </InputGroup>
