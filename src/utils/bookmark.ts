@@ -1,7 +1,23 @@
-import { Bookmark } from "@/models";
+import type { Bookmark } from "@/models";
 
 import { compareDates, elapsedDays, toDate } from "./date";
 import { toURL } from "./url";
+
+export function normalizeBookmarkURL(value: string | URL): string {
+  let url: URL;
+
+  try {
+    url = toURL(value.toString().trim());
+  } catch {
+    throw new Error("Enter a valid absolute URL.");
+  }
+
+  if (url.protocol !== "http:" && url.protocol !== "https:") {
+    throw new Error("Bookmark URLs must use HTTP or HTTPS.");
+  }
+
+  return url.toString();
+}
 
 export function displayBookmark(bookmark: Bookmark) {
   const bookmarkURL = toURL(bookmark.url);

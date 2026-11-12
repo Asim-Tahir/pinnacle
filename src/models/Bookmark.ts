@@ -1,5 +1,6 @@
 import { BookmarkType } from "@/enums";
 import { type IArchivable, type IViewable, Archivable, Viewable, mixins } from "@/mixins";
+import { normalizeBookmarkURL } from "@/utils/bookmark";
 import { toDate } from "@/utils/date";
 
 export interface IBookmark extends IArchivable, IViewable {
@@ -63,28 +64,12 @@ export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBook
 
     this.id = crypto.randomUUID();
     this.type = type;
-    this.url = Bookmark.normalizeURL(url);
+    this.url = normalizeBookmarkURL(url);
     this.name = name;
     this.description = description ?? "";
     this.tags = new Set(Bookmark.normalizeTags(tags));
     this.createdAt = new Date();
     this.updatedAt = null;
-  }
-
-  private static normalizeURL(value: string | URL): string {
-    let url: URL;
-
-    try {
-      url = new URL(value.toString().trim());
-    } catch {
-      throw new Error("Enter a valid absolute URL.");
-    }
-
-    if (url.protocol !== "http:" && url.protocol !== "https:") {
-      throw new Error("Bookmark URLs must use HTTP or HTTPS.");
-    }
-
-    return url.toString();
   }
 
   private static normalizeTags(tags: readonly string[]): string[] {
@@ -104,7 +89,7 @@ export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBook
   }
 
   update(data: IUpdateBookmark) {
-    this.url = Bookmark.normalizeURL(data.url);
+    this.url = normalizeBookmarkURL(data.url);
     this.name = data.name;
     this.description = data.description;
     this.tags = new Set(Bookmark.normalizeTags(data.tags));
@@ -113,7 +98,7 @@ export class Bookmark extends mixins(Archivable, Viewable) implements Omit<IBook
 
   partialUpdate(data: Partial<IUpdateBookmark>) {
     if (data.url !== undefined) {
-      this.url = Bookmark.normalizeURL(data.url);
+      this.url = normalizeBookmarkURL(data.url);
     }
 
     if (data.name !== undefined) {
