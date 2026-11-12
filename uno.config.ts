@@ -1,3 +1,4 @@
+import { theme as defaultTheme } from "@unocss/preset-wind4";
 import { defineConfig, presetWind4, transformerDirectives } from "unocss";
 
 export default defineConfig({
@@ -9,6 +10,7 @@ export default defineConfig({
   ],
   transformers: [transformerDirectives()],
   theme: {
+    ...defaultTheme,
     colors: {
       border: "var(--border)",
       input: "var(--input)",
@@ -63,9 +65,6 @@ export default defineConfig({
         border: "var(--sidebar-border)",
         ring: "var(--sidebar-ring)",
       },
-    },
-    radius: {
-      DEFAULT: "var(--radius)",
     },
   },
 });
