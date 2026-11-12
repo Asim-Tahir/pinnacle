@@ -60,20 +60,20 @@
 }
 
 .form-error {
-  @apply mt-[-4px] mb-0;
+  @apply mt-1 mb-0;
   @apply text-[#a63d32] text-xs;
 }
 
 .form-actions {
   @apply flex justify-end;
-  @apply gap-2 mt-[3px];
+  @apply gap-2 mt-1;
 }
 
 .cancel-button {
   font: inherit;
-  @apply min-h-[37px] px-3;
+  @apply min-h-10 px-3;
   @apply text-[#495b58];
-  @apply bg-white border border-[#dce6e3] rounded-[7px];
+  @apply bg-white border border-[var(--line)] rounded-2;
   @apply cursor-pointer;
 }
 
@@ -82,7 +82,7 @@
 }
 
 .bookmark-dialog button:focus-visible {
-  @apply outline-2 outline-[#438d83] outline-offset-2;
+  @apply outline-2 outline-[var(--teal)] outline-offset-2;
 }
 
 @media (max-width: 540px) {
