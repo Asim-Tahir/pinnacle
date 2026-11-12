@@ -35,7 +35,15 @@ function deserializeBookmarks(records: unknown): Bookmark[] {
 
   return records.map((record) => {
     const data = record instanceof Bookmark ? record.toJSON() : (record as IBookmarkSerializable);
-    return Bookmark.fromJSON({ ...data, type: data.type ?? BookmarkType.Active });
+    const tags = Array.isArray(data.tags)
+      ? data.tags.filter((tag): tag is string => typeof tag === "string")
+      : [];
+
+    return Bookmark.fromJSON({
+      ...data,
+      tags,
+      type: data.type ?? BookmarkType.Active,
+    });
   });
 }
 
