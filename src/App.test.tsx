@@ -36,7 +36,17 @@ describe("bookmark dashboard", () => {
     await screen.getByRole("button", { name: "Add bookmark" }).click();
     await screen.getByPlaceholder("https://example.com").fill("https://atlas.example/");
     await screen.getByPlaceholder("A name to remember it by").fill("Atlas");
+    const tagInput = screen.getByRole("textbox", { name: "Tags" });
+    await tagInput.fill("Design, Reading");
+    tagInput.element().dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+    await screen.getByRole("button", { name: "Reading" }).click();
     await screen.getByRole("button", { name: "Add bookmark" }).click();
+
+    const bookmarkCard = screen.getByRole("article");
+    await expect.element(bookmarkCard.getByText("Design", { exact: true })).toBeVisible();
+    await expect
+      .element(bookmarkCard.getByText("Reading", { exact: true }))
+      .not.toBeInTheDocument();
 
     await screen.getByRole("button", { name: "Actions for Atlas" }).click();
     await screen.getByRole("menuitem", { name: "Delete" }).click();
