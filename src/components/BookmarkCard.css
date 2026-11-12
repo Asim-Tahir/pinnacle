@@ -103,7 +103,7 @@
   }
 
   .bookmark-card-tag-chip {
-    @apply inline-flex items-center;
+    @apply inline-flex items-center gap-1;
     @apply min-h-5 max-w-full;
     @apply px-2 py-px overflow-hidden;
     @apply text-primary text-sm leading-relaxed;

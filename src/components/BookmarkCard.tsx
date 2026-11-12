@@ -7,6 +7,7 @@ import {
   Eye,
   MoreVertical,
   Pencil,
+  Tag,
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
@@ -100,6 +101,7 @@ export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) 
           <span className="bookmark-card-tags">
             {[...bookmark.tags].map((tag) => (
               <span className="bookmark-card-tag-chip" key={tag}>
+                <Tag size={12} />
                 {tag}
               </span>
             ))}
