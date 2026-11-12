@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { toURL } from "@/utils/url";
 
 export interface DuckDuckGoFaviconProviderProps {
@@ -9,11 +11,16 @@ export default function DuckDuckGoFaviconProvider({
   urlOrLink,
   onError,
 }: DuckDuckGoFaviconProviderProps) {
-  const url = toURL(urlOrLink);
+  const url = useMemo(() => toURL(urlOrLink), [urlOrLink]);
+
+  const faviconURL = useMemo(
+    () => `https://icons.duckduckgo.com/ip3/${encodeURIComponent(url.hostname)}.ico`,
+    [url.hostname],
+  );
 
   return (
     <img
-      src={`https://icons.duckduckgo.com/ip3/${url.hostname}.ico`}
+      src={faviconURL}
       alt={`${url.hostname} favicon`}
       onError={onError}
       data-provider="duckduckgo"
