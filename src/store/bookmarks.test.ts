@@ -184,6 +184,20 @@ test("persists create, edit, archive, restore, and delete operations", async () 
   expect(JSON.parse(localStorage.getItem(BOOKMARK_STORAGE_KEY)!).state.bookmarks).toEqual([]);
 });
 
+test("keeps bookmark instances when editing repeatedly", async () => {
+  const store = createBookmarkStore();
+  await store.getState().hydrate();
+  const bookmark = await store.getState().createBookmark(createBookmarkInput);
+
+  await store.getState().partialUpdateBookmark(bookmark.id, { name: "First edit" });
+  expect(store.getState().bookmarks[0]).toBeInstanceOf(Bookmark);
+
+  await store.getState().partialUpdateBookmark(bookmark.id, { name: "Second edit" });
+
+  expect(store.getState().bookmarks[0]).toBeInstanceOf(Bookmark);
+  expect(store.getState().bookmarks[0].name).toBe("Second edit");
+});
+
 test("view bookmark resolves after the view count is durably saved", async () => {
   const store = createBookmarkStore();
   await store.getState().hydrate();
