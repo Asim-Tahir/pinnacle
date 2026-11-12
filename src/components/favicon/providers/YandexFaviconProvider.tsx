@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import { toURL } from "@/utils/url";
 
 export interface YandexFaviconProviderProps {
@@ -6,11 +8,16 @@ export interface YandexFaviconProviderProps {
 }
 
 export default function YandexFaviconProvider({ urlOrLink, onError }: YandexFaviconProviderProps) {
-  const url = toURL(urlOrLink);
+  const url = useMemo(() => toURL(urlOrLink), [urlOrLink]);
+
+  const faviconURL = useMemo(
+    () => `https://favicon.yandex.net/favicon/${url.hostname}`,
+    [url.hostname],
+  );
 
   return (
     <img
-      src={`https://favicon.yandex.net/favicon/${url.hostname}`}
+      src={faviconURL}
       alt={`${url.hostname} favicon`}
       onError={onError}
       data-provider="yandex"
