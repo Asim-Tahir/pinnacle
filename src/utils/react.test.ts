@@ -1,7 +1,22 @@
 import { createRef } from "react";
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 
-import { isRef, unwrapRef } from "./react";
+import { isRef, unwrapGetter, unwrapRef } from "./react";
+
+describe("unwrapGetter", () => {
+  test("returns a non-getter value unchanged", () => {
+    const value = { message: "hello" };
+
+    expect(unwrapGetter(value)).toBe(value);
+  });
+
+  test("evaluates a getter", () => {
+    const getter = vi.fn(() => "value");
+
+    expect(unwrapGetter(getter)).toBe("value");
+    expect(getter).toHaveBeenCalledOnce();
+  });
+});
 
 describe("isRef", () => {
   test("identifies React refs", () => {
