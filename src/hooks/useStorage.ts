@@ -1,4 +1,3 @@
-/* oxlint-disable @typescript-eslint/no-explicit-any */
 // see: https://github.com/vueuse/vueuse/blob/b62d588999072919e1b7e991bb10f6c978a12d00/packages/core/useStorage/index.ts
 
 import { useCallback, useEffect, useState } from "react";
