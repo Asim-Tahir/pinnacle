@@ -12,14 +12,13 @@
     @apply flex items-center;
     @apply gap-2.5 h-10 px-2.5;
     @apply text-ring;
-    @apply bg-white border border-border rounded-2;
-    width: min(100%, 16rem);
-    box-shadow: 0 1px 2px rgb(22 51 47 / 3%);
+    @apply bg-muted/30 border border-border rounded-2;
+    @apply w-[min(100%,16rem)];
+    @apply shadow-md;
   }
 
   .header-search-box:focus-within {
     @apply border-ring;
-    box-shadow: 0 0 0 3px rgb(7 91 85 / 9%);
   }
 
   .header-search-box input {

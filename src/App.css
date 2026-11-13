@@ -48,7 +48,7 @@
   @apply flex items-center;
   @apply gap-1 min-h-8 px-2;
   @apply text-foreground text-xs;
-  @apply bg-white border border-border rounded-2;
+  @apply bg-muted/80 border border-border rounded-2;
 }
 
 .sort-control select {
