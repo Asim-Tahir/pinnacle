@@ -23,6 +23,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -100,10 +101,10 @@ export default function BookmarkCard({ bookmark, archived }: BookmarkCardProps) 
         {bookmark.tags.size > 0 && (
           <span className="bookmark-card-tags">
             {[...bookmark.tags].map((tag) => (
-              <span className="bookmark-card-tag-chip" key={tag}>
+              <Badge variant="secondary" key={tag}>
                 <Tag size={12} />
                 {tag}
-              </span>
+              </Badge>
             ))}
           </span>
         )}
