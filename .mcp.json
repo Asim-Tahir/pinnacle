@@ -5,6 +5,12 @@
       "command": "npx",
       "args": ["-y", "shadcn@latest", "mcp"],
       "tools": ["*"]
+    },
+    "webmcp-local-relay": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mcp-b/webmcp-local-relay@latest"],
+      "tools": ["*"]
     }
   }
 }
