@@ -26,6 +26,10 @@
     @apply text-foreground text-xs;
     @apply bg-transparent border-0 outline-0;
     @apply placeholder:text-muted-foreground;
+
+    &::-webkit-search-cancel-button {
+      @apply hidden;
+    }
   }
 
   .header-search-box button {
