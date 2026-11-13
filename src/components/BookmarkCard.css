@@ -83,7 +83,7 @@
     @apply text-card-foreground bg-transparent;
     @apply border border-border rounded-1.5;
     @apply cursor-pointer;
-    @apply hover:text-primary hover:bg-secondary;
+    @apply hover:text-card-foreground/60 hover:bg-card/60;
   }
 
   .bookmark-card-body {
