@@ -1,5 +1,7 @@
 import { useCallback, useEffect } from "react";
 
+import { unwrapRef } from "@/utils/react";
+
 export interface GenericEventMap {
   [key: string]: Event;
 }
@@ -10,6 +12,11 @@ export type ShadowRootEventName = keyof ShadowRootEventMap;
 export type HTMLElementEventName = keyof HTMLElementEventMap;
 export type CookieStoreEventName = keyof CookieStoreEventMap;
 export type BroadcastChannelEventName = keyof BroadcastChannelEventMap;
+
+type EventListenerTarget<T extends EventTarget> =
+  | T
+  | React.RefObject<T>
+  | React.RefObject<T | null>;
 
 export interface UseEventListenerReturn {
   /**
@@ -51,44 +58,43 @@ export interface UseEventListenerReturn {
  * }
  * ```
  */
-// @ts-expect-error - TypeScript gets confused with this and can't infer the correct overload
 export function useEventListener<E extends WindowEventName>(
-  target: Window,
+  target: EventListenerTarget<Window>,
   event: Arrayable<E>,
   listener: Arrayable<(this: Window, event: WindowEventMap[E]) => void>,
   options?: boolean | AddEventListenerOptions,
 ): UseEventListenerReturn;
 
 export function useEventListener<E extends DocumentEventName>(
-  target: Document,
+  target: EventListenerTarget<Document>,
   event: Arrayable<E>,
   listener: Arrayable<(this: Document, event: DocumentEventMap[E]) => void>,
   options?: boolean | AddEventListenerOptions,
 ): UseEventListenerReturn;
 
 export function useEventListener<E extends ShadowRootEventName>(
-  target: ShadowRoot,
+  target: EventListenerTarget<ShadowRoot>,
   event: Arrayable<E>,
   listener: Arrayable<(this: ShadowRoot, event: ShadowRootEventMap[E]) => void>,
   options?: boolean | AddEventListenerOptions,
 ): UseEventListenerReturn;
 
 export function useEventListener<E extends HTMLElementEventName>(
-  target: HTMLElement,
+  target: EventListenerTarget<HTMLElement>,
   event: Arrayable<E>,
   listener: Arrayable<(this: HTMLElement, event: HTMLElementEventMap[E]) => void>,
   options?: boolean | AddEventListenerOptions,
 ): UseEventListenerReturn;
 
 export function useEventListener<E extends CookieStoreEventName>(
-  target: CookieStore,
+  target: EventListenerTarget<CookieStore>,
   event: Arrayable<E>,
   listener: Arrayable<(this: CookieStore, event: CookieStoreEventMap[E]) => void>,
   options?: boolean | AddEventListenerOptions,
 ): UseEventListenerReturn;
 
 export function useEventListener<E extends BroadcastChannelEventName>(
-  target: BroadcastChannel,
+  target: EventListenerTarget<BroadcastChannel>,
   event: Arrayable<E>,
   listener: Arrayable<(this: BroadcastChannel, event: BroadcastChannelEventMap[E]) => void>,
   options?: boolean | AddEventListenerOptions,
@@ -99,48 +105,60 @@ export function useEventListener<
   T extends EventTarget = EventTarget,
   EV extends Event = Event,
 >(
-  target: T,
+  target: EventListenerTarget<T>,
   event: Arrayable<E>,
   listener: Arrayable<(this: T, event: EV) => void>,
   options?: boolean | AddEventListenerOptions,
 ): UseEventListenerReturn;
 
-export function useEventListener<E extends string>(
-  target: EventTarget,
+export function useEventListener<E extends string, T extends EventTarget = EventTarget>(
+  target: EventListenerTarget<T>,
   event: Arrayable<E>,
-  listener: Arrayable<(this: EventTarget, event: Event) => void>,
+  listener: Arrayable<(this: T, event: Event) => void>,
   options?: boolean | AddEventListenerOptions,
 ): UseEventListenerReturn {
-  const unsubscribe = useCallback(() => {
-    const events = Array.isArray(event) ? event : [event];
-    const listeners = Array.isArray(listener) ? listener : [listener];
-
-    for (const event of events) {
-      for (const listener of listeners) {
-        target.removeEventListener(event, listener, options);
+  const unwrapTarget = unwrapRef(target);
+  const unsubscribeFrom = useCallback(
+    (resolvedTarget: T | null) => {
+      if (!resolvedTarget) {
+        return;
       }
-    }
-  }, [target, event, listener, options]);
+
+      const events = Array.isArray(event) ? event : [event];
+      const listeners = Array.isArray(listener) ? listener : [listener];
+
+      for (const event of events) {
+        for (const listener of listeners) {
+          resolvedTarget.removeEventListener(event, listener, options);
+        }
+      }
+    },
+    [event, listener, options],
+  );
+  const unsubscribe = useCallback(() => {
+    unsubscribeFrom(unwrapTarget ?? unwrapRef(target));
+  }, [target, unwrapTarget, unsubscribeFrom]);
 
   const subscribe = useCallback(() => {
+    const unwrappedTarget = unwrapTarget ?? unwrapRef(target);
+    if (!unwrappedTarget) {
+      return;
+    }
+
     const events = Array.isArray(event) ? event : [event];
     const listeners = Array.isArray(listener) ? listener : [listener];
 
     for (const event of events) {
       for (const listener of listeners) {
-        target.addEventListener(event, listener, options);
+        unwrappedTarget.addEventListener(event, listener, options);
       }
     }
 
-    return unsubscribe;
-  }, [target, event, listener, options, unsubscribe]);
+    return () => unsubscribeFrom(unwrappedTarget);
+  }, [target, unwrapTarget, event, listener, options, unsubscribeFrom]);
 
   useEffect(() => {
-    const unsubscribe = subscribe();
-
-    return () => {
-      unsubscribe();
-    };
+    return subscribe();
   }, [subscribe]);
 
   return {

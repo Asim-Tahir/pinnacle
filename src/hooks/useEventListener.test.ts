@@ -1,3 +1,4 @@
+import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { page } from "vitest/browser";
 
@@ -929,5 +930,21 @@ describe("useEventListener", () => {
         undefined,
       );
     });
+  });
+
+  test("supports refs as event targets", async () => {
+    const target = new EventTarget();
+    const targetRef = createRef<EventTarget>();
+    targetRef.current = target;
+    const listener = vi.fn();
+
+    const screen = await page.renderHook(() => useEventListener(targetRef, "ref-event", listener));
+
+    target.dispatchEvent(new Event("ref-event"));
+    expect(listener).toHaveBeenCalledOnce();
+
+    screen.result.current.unsubscribe();
+    target.dispatchEvent(new Event("ref-event"));
+    expect(listener).toHaveBeenCalledOnce();
   });
 });
