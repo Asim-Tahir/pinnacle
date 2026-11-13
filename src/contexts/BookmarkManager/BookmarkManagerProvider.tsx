@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import {
   BookmarkManagerContext,
+  type BookmarkActionResult,
   type BookmarkManagerContextValue,
   type BookmarkSortMode,
   type BookmarkView,
@@ -96,38 +97,38 @@ export function BookmarkManagerProvider({ children }: React.PropsWithChildren) {
     );
   }
 
-  async function runAction(action: () => Promise<unknown>) {
+  async function runAction<T>(action: () => Promise<T>): Promise<BookmarkActionResult<T>> {
     setActionError("");
     try {
-      await action();
+      return { success: true, value: await action() };
     } catch (error) {
-      setActionError(error instanceof Error ? error.message : "Unable to update bookmarks.");
+      const message = error instanceof Error ? error.message : "Unable to update bookmarks.";
+      setActionError(message);
+      return { success: false, error: message };
     }
   }
 
-  async function archiveBookmark(bookmark: Bookmark) {
-    await runAction(() => archive(bookmark.id));
+  function archiveBookmark(bookmark: Bookmark) {
+    return runAction(() => archive(bookmark.id));
   }
 
-  async function restoreBookmark(bookmark: Bookmark) {
-    await runAction(() => restore(bookmark.id));
+  function restoreBookmark(bookmark: Bookmark) {
+    return runAction(() => restore(bookmark.id));
   }
 
-  async function deleteBookmark(bookmark: Bookmark) {
-    await runAction(() => remove(bookmark.id));
+  function deleteBookmark(bookmark: Bookmark) {
+    return runAction(() => remove(bookmark.id));
   }
 
-  async function openBookmark(bookmark: Bookmark) {
-    setActionError("");
+  function openBookmark(bookmark: Bookmark) {
     setBlockedUrl("");
 
-    try {
+    return runAction(async () => {
       const url = bookmark.url.toString();
       const opened = await openBookmarkTab(url, () => viewBookmark(bookmark.id));
       if (!opened) setBlockedUrl(url);
-    } catch (error) {
-      setActionError(error instanceof Error ? error.message : "Unable to open this bookmark.");
-    }
+      return { opened, url };
+    });
   }
 
   const value: BookmarkManagerContextValue = {
