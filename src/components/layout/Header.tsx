@@ -1,5 +1,6 @@
 import { Plus, Search, X } from "lucide-react";
 
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useBookmarkDialog } from "@/hooks/useBookmarkDialog";
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
@@ -28,6 +29,7 @@ export default function Header() {
         )}
       </label>
       <div className="header-actions">
+        <ThemeSwitcher />
         <button
           className="add-button"
           type="button"
