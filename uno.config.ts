@@ -1,11 +1,16 @@
 import { theme as defaultTheme } from "@unocss/preset-wind4";
 import { defineConfig, presetWebFonts, presetWind4, transformerDirectives } from "unocss";
 
+import { DARK_THEME_CLASS, LIGHT_THEME_CLASS } from "./src/constants/theme";
+
 export default defineConfig({
   outputToCssLayers: true,
   presets: [
     presetWind4({
-      dark: "media",
+      dark: {
+        dark: DARK_THEME_CLASS,
+        light: LIGHT_THEME_CLASS,
+      },
     }),
     presetWebFonts({
       provider: "google",

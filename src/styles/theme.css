@@ -1,5 +1,6 @@
 @layer theme {
-  :root {
+  :root,
+  .pinnacle-theme--light {
     --background: oklch(1 0 0);
     --foreground: oklch(0.148 0.004 228.8);
     --card: oklch(1 0 0);
@@ -33,7 +34,7 @@
     --sidebar-ring: oklch(0.723 0.014 214.4);
   }
 
-  .dark {
+  .pinnacle-theme--dark {
     --background: oklch(0.148 0.004 228.8);
     --foreground: oklch(0.987 0.002 197.1);
     --card: oklch(0.218 0.008 223.9);
