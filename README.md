@@ -2,6 +2,64 @@
 
 Pinnacle is a local-first bookmark manager for saving, organizing, and revisiting links. Bookmark data stays in the current browser profile; there are no accounts, backend, or cross-device sync.
 
+## Screenshots
+
+<table>
+  <tbody>
+    <tr>
+      <td>
+        <figure>
+          <img src="https://github.com/user-attachments/assets/e2657296-245a-4176-aac4-26faca7a2fc3" alt="Home view showing active bookmarks and search">
+          <figcaption>Home view for browsing and searching active bookmarks.</figcaption>
+        </figure>
+      </td>
+      <td>
+        <figure>
+          <img src="https://github.com/user-attachments/assets/e3d10e63-e19a-4fb6-a010-daa526b9efa5" alt="Archived view showing archived bookmarks">
+          <figcaption>Archived bookmarks, which can be restored or deleted.</figcaption>
+        </figure>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <figure>
+          <img src="https://github.com/user-attachments/assets/d3016b2f-c6be-4cc7-bfbb-6030ce63c2e6" alt="Bookmark list filtered by selected tags">
+          <figcaption>Bookmarks filtered by the selected tags.</figcaption>
+        </figure>
+      </td>
+      <td>
+        <figure>
+          <img src="https://github.com/user-attachments/assets/c2a4f3bf-8e95-492b-addb-69f6e391416d" alt="Dialog for adding a bookmark">
+          <figcaption>Add bookmark dialog for entering a URL, name, description, and tags.</figcaption>
+        </figure>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <figure>
+          <img src="https://github.com/user-attachments/assets/b7eddadb-12e3-48d1-9314-941d85fd09b8" alt="Bookmark card actions menu">
+          <figcaption>Bookmark card actions for editing, archiving, and deleting.</figcaption>
+        </figure>
+      </td>
+      <td>
+        <figure>
+          <img src="https://github.com/user-attachments/assets/97e650c0-be95-42f3-ad17-7ce144f80f3f" alt="Bookmark sorting options">
+          <figcaption>Sort bookmarks by recommendation, recent views, or name.</figcaption>
+        </figure>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <figure>
+          <img src="https://github.com/user-attachments/assets/260bfcf1-cec5-4638-8126-3ba15b20301c" alt="Pinnacle displayed in dark mode">
+          <figcaption>Dark mode appearance with the theme switcher.</figcaption>
+        </figure>
+      </td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>
+
 ## Features
 
 - Save bookmarks with an optional name, description, and tags.
