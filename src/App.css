@@ -17,7 +17,7 @@
 .add-button {
   @apply inline-flex items-center justify-center;
   @apply gap-2 min-h-10 px-3.5;
-  @apply text-foreground font-bold;
+  @apply text-white font-bold;
   @apply bg-primary border border-border rounded-2;
   @apply cursor-pointer;
   @apply hover:bg-primary/85;
