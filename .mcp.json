@@ -2,8 +2,8 @@
   "mcpServers": {
     "shadcn": {
       "type": "stdio",
-      "command": "bunx",
-      "args": ["shadcn@latest", "mcp"],
+      "command": "npx",
+      "args": ["-y", "shadcn@latest", "mcp"],
       "tools": ["*"]
     }
   }
