@@ -111,10 +111,11 @@ export function createBookmarkStore(storage: Storage = localStorage) {
           const updatedBookmark = bookmarks[index].clone();
           update(updatedBookmark);
 
-          bookmarks[index] = updatedBookmark;
+          const updatedBookmarks = [...bookmarks];
+          updatedBookmarks[index] = updatedBookmark;
 
           return {
-            bookmarks,
+            bookmarks: updatedBookmarks,
             result: updatedBookmark,
           };
         };
