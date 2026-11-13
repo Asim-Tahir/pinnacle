@@ -4,6 +4,7 @@ import { page } from "vitest/browser";
 import "virtual:uno.css";
 
 import App from "@/App";
+import { DARK_THEME_CLASS, LIGHT_THEME_CLASS, THEME_STORAGE_KEY } from "@/constants/theme";
 import { BookmarkDialogProvider } from "@/contexts/BookmarkDialog";
 import { BookmarkManagerProvider } from "@/contexts/BookmarkManager";
 
@@ -26,6 +27,26 @@ describe("bookmark dashboard", () => {
       .element(screen.getByRole("heading", { name: "A good link belongs here" }))
       .toHaveAttribute("data-slot", "empty-title");
     await expect.element(screen.getByPlaceholder("Search by title...")).toBeVisible();
+  });
+
+  test("switches and persists the selected color theme", async () => {
+    localStorage.removeItem(THEME_STORAGE_KEY);
+    const screen = await page.render(<TestApp />);
+
+    await screen.getByRole("button", { name: "Theme: system" }).click();
+    await screen.getByRole("menuitemradio", { name: "Dark" }).click();
+
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe("dark");
+    expect(document.documentElement.classList.contains(DARK_THEME_CLASS)).toBe(true);
+    expect(document.documentElement.classList.contains(LIGHT_THEME_CLASS)).toBe(false);
+
+    await screen.getByRole("button", { name: "Theme: dark" }).click();
+    await screen.getByRole("menuitemradio", { name: "Light" }).click();
+
+    expect(localStorage.getItem(THEME_STORAGE_KEY)).toBe("light");
+    expect(document.documentElement.classList.contains(DARK_THEME_CLASS)).toBe(false);
+    expect(document.documentElement.classList.contains(LIGHT_THEME_CLASS)).toBe(true);
+    localStorage.removeItem(THEME_STORAGE_KEY);
   });
 
   test("confirms bookmark deletion with an alert dialog", async () => {
