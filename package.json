@@ -17,6 +17,8 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@mcp-b/global": "^6.2.0",
+    "@mcp-b/react-webmcp": "^6.2.0",
     "cva": "^1.0.0-beta.12",
     "lucide-react": "^1.70.0",
     "radix-ui": "^1.8.1",
