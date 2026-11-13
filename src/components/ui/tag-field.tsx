@@ -1,4 +1,5 @@
 import { cx } from "cva";
+import { TagIcon } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 
 import { Input } from "@/components/ui/input";
@@ -155,6 +156,7 @@ export function TagField({
           <TagList>
             {tags.map((tag) => (
               <Tag key={tag} value={tag}>
+                <TagIcon size={12} />
                 {tag}
               </Tag>
             ))}
