@@ -74,7 +74,7 @@
 
   .bookmark-card-title small {
     @apply text-ellipsis whitespace-nowrap overflow-hidden;
-    @apply text-primary text-xs;
+    @apply text-card-foreground/60 text-xs;
   }
 
   .bookmark-card-menu-button {
@@ -102,19 +102,10 @@
     @apply flex flex-wrap gap-1.5 mt-auto;
   }
 
-  .bookmark-card-tag-chip {
-    @apply inline-flex items-center gap-1;
-    @apply min-h-5 max-w-full;
-    @apply px-2 py-px overflow-hidden;
-    @apply text-primary text-sm leading-relaxed;
-    @apply bg-primary/10 rounded-sm;
-    @apply text-ellipsis whitespace-nowrap;
-  }
-
   .bookmark-card-external-link {
-    @apply grid w-6 h-6 ml-auto place-items-center;
-    @apply text-primary/80 rounded-1;
-    @apply hover:text-primary hover:bg-background;
+    @apply grid size-6 ml-auto place-items-center;
+    @apply text-accent-foreground rounded-1;
+    @apply hover:text-accent-foreground/60 hover:bg-background;
   }
 
   @media (max-width: 540px) {

@@ -52,6 +52,7 @@
     @apply min-w-4 h-4 px-2;
     @apply text-sidebar-primary text-xs;
     @apply bg-sidebar-primary-foreground rounded-sm;
+    @apply empty:bg-transparent;
   }
 
   .nav-item.is-active .nav-count {
@@ -78,7 +79,7 @@
   }
 
   .tag-filter:hover {
-    @apply bg-[#f3f7f6];
+    @apply bg-sidebar-accent;
   }
 
   .tag-filter input {
@@ -158,7 +159,7 @@
 
     .tag-filter {
       @apply inline-flex flex-none gap-1.5 min-h-7.5 px-2;
-      @apply bg-[#f3f7f6];
+      @apply bg-sidebar-foreground;
     }
 
     .tag-filter small {

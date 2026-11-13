@@ -7,7 +7,7 @@
 
 .empty-tags {
   @apply px-2.5 py-1;
-  @apply text-[#8a9694] text-xs;
+  @apply text-foreground text-xs;
 }
 
 .main-column {
@@ -17,7 +17,7 @@
 .add-button {
   @apply inline-flex items-center justify-center;
   @apply gap-2 min-h-10 px-3.5;
-  @apply text-secondary font-bold;
+  @apply text-foreground font-bold;
   @apply bg-primary border border-border rounded-2;
   @apply cursor-pointer;
   @apply hover:bg-primary/85;
@@ -34,19 +34,14 @@
 }
 
 .content-heading {
+  @apply min-h-8;
   @apply flex items-end justify-between;
   @apply gap-4 mb-4;
 }
 
-.eyebrow {
-  @apply mb-1.5;
-  @apply text-[#7b8b88] text-2.5 font-bold tracking-[0.1em] uppercase;
-}
-
 .content-heading h1 {
   @apply m-0;
-  @apply text-[#182b29] text-5 font-bold leading-normal;
-  font-family: var(--font-display);
+  @apply text-accent-foreground text-xl font-bold leading-normal;
 }
 
 .sort-control {
@@ -66,9 +61,9 @@
 
 .status-message {
   @apply mb-2 px-3 py-2.5;
-  @apply text-[#753b32] text-sm;
-  @apply bg-[#fff2ef];
-  @apply border border-[#f1d4ce] rounded-2;
+  @apply text-destructive text-sm;
+  @apply bg-destructive/20;
+  @apply border border-border rounded-2;
 }
 
 .status-message a {
@@ -85,23 +80,22 @@
 .library-message {
   @apply flex flex-col items-center justify-center gap-1;
   @apply min-h-40 p-7;
-  @apply text-[#637370] text-center;
+  @apply text-foreground text-center;
 }
 
 .empty-mark {
   @apply grid size-8 mb-1 place-items-center;
   @apply text-primary;
-  @apply bg-[#dfede9] rounded-4;
+  @apply bg-foreground rounded-4;
 }
 
 .library-empty h2 {
   @apply m-0;
-  @apply text-foreground text-lg font-bold;
-  font-family: var(--font-display);
+  @apply text-accent-foreground text-lg font-bold;
 }
 
 .library-empty p {
-  @apply text-[#758481] text-sm leading-normal;
+  @apply text-muted-foreground text-sm leading-normal;
 }
 
 .empty-add {
@@ -111,7 +105,7 @@
 .app-shell button:focus-visible,
 .app-shell a:focus-visible,
 .app-shell select:focus-visible {
-  @apply outline-2 outline-primary outline-offset-2;
+  @apply outline-2 outline-ring outline-offset-2;
 }
 
 @keyframes card-arrive {
@@ -139,7 +133,7 @@
   }
 
   .content-heading h1 {
-    @apply text-5;
+    @apply text-xl;
   }
 
   .sort-control {
