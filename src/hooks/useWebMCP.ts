@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 
 import { useSupported } from "@/hooks/useSupported";
+import { unwrapGetter } from "@/utils/react";
 
 /**
  * A single block of a WebMCP tool result.
@@ -62,26 +63,24 @@ export interface ModelContext {
 // once the DOM lib ships its own definition).
 export type DocumentWithModelContext = Document & { modelContext?: ModelContext };
 
-export type MaybeRefOrGetter<T> = T | (() => T);
-
 export interface UseWebMCPOptions<Args, Result> {
   document?: Document;
   /**
    * Tool identifier the agent uses to invoke this tool.
    */
-  name: MaybeRefOrGetter<string>;
+  name: MaybeGetter<string>;
   /**
    * Natural-language description the agent reads to decide when to call it.
    */
-  description: MaybeRefOrGetter<string>;
+  description: MaybeGetter<string>;
   /**
    * JSON Schema describing the tool arguments.
    */
-  inputSchema?: MaybeRefOrGetter<object | undefined>;
+  inputSchema?: MaybeGetter<object | undefined>;
   /**
    * Hints (`readOnlyHint`, `untrustedContentHint`, …) shaping agent behavior.
    */
-  annotations?: MaybeRefOrGetter<WebMCPToolAnnotations | undefined>;
+  annotations?: MaybeGetter<WebMCPToolAnnotations | undefined>;
   /**
    * The function the agent calls. May be async. Its return value is normalized
    * into a WebMCP tool result, and any thrown/returned `Error` becomes an
@@ -93,7 +92,7 @@ export interface UseWebMCPOptions<Args, Result> {
    *
    * @default true
    */
-  enabled?: MaybeRefOrGetter<boolean>;
+  enabled?: MaybeGetter<boolean>;
   /**
    * Shape the `execute` result before it is normalized into a tool response.
    */
@@ -146,10 +145,6 @@ function createRegistrationStore() {
 }
 
 const defaultDocument = typeof document === "undefined" ? undefined : document;
-
-function toValue<T>(value: MaybeRefOrGetter<T>): T {
-  return typeof value === "function" ? (value as () => T)() : value;
-}
 
 // Stringify for error reporting without ever throwing itself
 // (JSON.stringify throws on circular references and BigInt).
@@ -286,11 +281,11 @@ export function useWebMCP<Args = Record<string, unknown>, Result = unknown>(
     registrationStore.getSnapshot,
     registrationStore.getSnapshot,
   );
-  const name = toValue(options.name);
-  const description = toValue(options.description);
-  const inputSchema = toValue(options.inputSchema);
-  const annotations = toValue(options.annotations);
-  const enabledValue = toValue(enabled);
+  const name = unwrapGetter(options.name);
+  const description = unwrapGetter(options.description);
+  const inputSchema = unwrapGetter(options.inputSchema);
+  const annotations = unwrapGetter(options.annotations);
+  const enabledValue = unwrapGetter(enabled);
   const schemaKey = inputSchema ? safeStringify(inputSchema) : "";
   const annotationsKey = annotations ? safeStringify(annotations) : "";
   const registrationKey = useMemo(() => Symbol(), []);
