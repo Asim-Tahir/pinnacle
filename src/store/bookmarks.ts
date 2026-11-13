@@ -250,5 +250,3 @@ export function createBookmarkStore(storage: Storage = localStorage) {
     ),
   );
 }
-
-export const useBookmarksStore = createBookmarkStore();

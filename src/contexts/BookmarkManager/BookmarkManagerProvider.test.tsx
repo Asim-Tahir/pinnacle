@@ -5,8 +5,8 @@ import { BOOKMARK_STORAGE_KEY } from "@/constants";
 import { BookmarkManagerProvider } from "@/contexts/BookmarkManager";
 import { BookmarkType } from "@/enums";
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
+import { useBookmarkStore } from "@/hooks/useBookmarkStore";
 import { Bookmark } from "@/models";
-import { useBookmarksStore } from "@/store/bookmarks";
 
 const atlasBookmark = {
   url: "https://atlas.example/",
@@ -25,8 +25,8 @@ const zephyrBookmark = {
 const missingBookmark = new Bookmark(BookmarkType.Active, "https://missing.example/", "Missing");
 
 beforeEach(() => {
-  const { hydrated } = useBookmarksStore.getState();
-  useBookmarksStore.setState({ bookmarks: [], hydrated, persistenceError: null });
+  const { hydrated } = useBookmarkStore.getState();
+  useBookmarkStore.setState({ bookmarks: [], hydrated, persistenceError: null });
   localStorage.clear();
 });
 

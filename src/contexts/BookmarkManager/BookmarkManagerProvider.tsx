@@ -6,8 +6,8 @@ import {
   type BookmarkSortMode,
   type BookmarkView,
 } from "@/contexts/BookmarkManager";
+import { useBookmarkStore } from "@/hooks/useBookmarkStore";
 import type { Bookmark } from "@/models";
-import { useBookmarksStore } from "@/store/bookmarks";
 import {
   displayBookmark,
   openBookmark as openBookmarkTab,
@@ -23,17 +23,17 @@ export function BookmarkManagerProvider({ children }: React.PropsWithChildren) {
   const [actionError, setActionError] = useState("");
   const [blockedUrl, setBlockedUrl] = useState("");
 
-  const bookmarks = useBookmarksStore((state) => state.bookmarks);
-  const hydrated = useBookmarksStore((state) => state.hydrated);
-  const persistenceError = useBookmarksStore((state) => state.persistenceError);
-  const hydrate = useBookmarksStore((state) => state.hydrate);
-  const createBookmark = useBookmarksStore((state) => state.createBookmark);
-  const updateBookmark = useBookmarksStore((state) => state.updateBookmark);
-  const partialUpdateBookmark = useBookmarksStore((state) => state.partialUpdateBookmark);
-  const archive = useBookmarksStore((state) => state.archiveBookmark);
-  const restore = useBookmarksStore((state) => state.restoreBookmark);
-  const remove = useBookmarksStore((state) => state.deleteBookmark);
-  const viewBookmark = useBookmarksStore((state) => state.viewBookmark);
+  const bookmarks = useBookmarkStore((state) => state.bookmarks);
+  const hydrated = useBookmarkStore((state) => state.hydrated);
+  const persistenceError = useBookmarkStore((state) => state.persistenceError);
+  const hydrate = useBookmarkStore((state) => state.hydrate);
+  const createBookmark = useBookmarkStore((state) => state.createBookmark);
+  const updateBookmark = useBookmarkStore((state) => state.updateBookmark);
+  const partialUpdateBookmark = useBookmarkStore((state) => state.partialUpdateBookmark);
+  const archive = useBookmarkStore((state) => state.archiveBookmark);
+  const restore = useBookmarkStore((state) => state.restoreBookmark);
+  const remove = useBookmarkStore((state) => state.deleteBookmark);
+  const viewBookmark = useBookmarkStore((state) => state.viewBookmark);
 
   useEffect(() => {
     void hydrate().catch(() => undefined);

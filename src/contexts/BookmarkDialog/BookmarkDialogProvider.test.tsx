@@ -7,14 +7,14 @@ import { BookmarkManagerProvider } from "@/contexts/BookmarkManager";
 import { BookmarkType } from "@/enums";
 import { useBookmarkDialog } from "@/hooks/useBookmarkDialog";
 import { useBookmarkManager } from "@/hooks/useBookmarkManager";
+import { useBookmarkStore } from "@/hooks/useBookmarkStore";
 import { Bookmark } from "@/models";
-import { useBookmarksStore } from "@/store/bookmarks";
 
 const bookmark = new Bookmark(BookmarkType.Active, "https://example.com/", "Example");
 
 beforeEach(() => {
-  const { hydrated } = useBookmarksStore.getState();
-  useBookmarksStore.setState({ bookmarks: [], hydrated, persistenceError: null });
+  const { hydrated } = useBookmarkStore.getState();
+  useBookmarkStore.setState({ bookmarks: [], hydrated, persistenceError: null });
   localStorage.removeItem(BOOKMARK_STORAGE_KEY);
 });
 
